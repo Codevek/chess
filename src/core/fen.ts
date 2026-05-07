@@ -1,12 +1,13 @@
+
 import type { Piece } from "../types/piece";
 
-export function parseFen(fen: String) {
+export function parseFen(fen: String){
   // const boardP = fen.split(" ")
   // const onlyBoard = boardP[0]
   const [onlyBoard] = fen.split(" "); //this line meant above 2 lines
   const rows = onlyBoard?.split("/");
 
-  return rows?.map((row) => {
+  return rows?.map((row)=> {
     const result: (Piece | null)[] = [];
     for (const char of row) {
       if (!isNaN(Number(char))) {

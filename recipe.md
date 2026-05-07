@@ -1,8 +1,8 @@
 # InitialSetup
 
 ``` bash
-mkdir code-engine
-cd code-engine
+mkdir chess-engine
+cd chess-engine 
 npm init -y
 npm install typescript tsup --save-dev
 npx tsc --init
