@@ -1,4 +1,5 @@
 import { isInsideBoard } from "../utils.js";
+import { parseFEN } from "../fen.js";
 
 export function getPawnMoves(board, pRow, pCol, piece) {
   const moves = [];
@@ -48,6 +49,14 @@ export function getPawnMoves(board, pRow, pCol, piece) {
       });
     }
   }
-
+  
+  console.log(piece);
   return moves;
 }
+
+// getPawnMoves(
+//   parseFEN("8/4Q3/pPb5/RP4p1/1K2p3/5PP1/2R1q3/2br3k w - - 0 1"),
+//   6,
+//   2,
+//   parseFEN("8/4Q3/pPb5/RP4p1/1K2p3/5PP1/2R1q3/2br3k w - - 0 1")[6][2]
+// );
