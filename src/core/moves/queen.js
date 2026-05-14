@@ -1,9 +1,14 @@
-// import { parseFEN } from "../fen.js";
+import { parseFEN } from "../fen.js";
 import { isInsideBoard } from "../utils.js";
 
-export function getBishopMoves(board, pRow, pCol, piece) {
+export function getQueenMoves(board, pRow, pCol, piece) {
   const moves = [];
   const direction = [
+    [-1, 0], //top
+    [1, 0], //bottom
+    [0, 1], //right
+    [0, -1], //left
+
     [-1, -1], //topLeft
     [-1, 1], //topRight
     [1, -1], //botLeft
@@ -25,7 +30,7 @@ export function getBishopMoves(board, pRow, pCol, piece) {
         });
       }
 
-      else if (target.color !== piece.color){ //empty piece
+      else if (target.color !== piece.color){ //enemy piece
         moves.push({
           from: [pRow, pCol],
           to: [pNewRow, pNewCol],
@@ -46,7 +51,7 @@ export function getBishopMoves(board, pRow, pCol, piece) {
   return moves;
 }
 
-// getBishopMoves(
+// getQueenMoves(
 //   parseFEN("5R2/2b1n3/3P3K/N3PBp1/6N1/3P1p2/1p2k1Pp/8 w - - 0 1"),
 //   3,
 //   5,

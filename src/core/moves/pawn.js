@@ -35,17 +35,17 @@ export function getPawnMoves(board, pRow, pCol, piece) {
 
   // diagonalCapture
   for (const colDir of [-1, 1]) {
-    const newPCol = pCol + colDir;
-    const newPRow = pRow + rowDir;
+    const pNewCol = pCol + colDir;
+    const pNewRow = pRow + rowDir;
 
-    if (!isInsideBoard(newPRow, newPCol)) continue; //its for safety, like if the pawn is in the edge of the board so outside the board would be illegal move, nd this "continue" thing will take us outside the "for" loop directly without running anything else below
+    if (!isInsideBoard(pNewRow, pNewCol)) continue; //its for safety, like if the pawn is in the edge of the board so outside the board would be illegal move, nd this "continue" thing will take us outside the "for" loop directly without running anything else below
 
-    const target = board[newPRow][newPCol];
+    const target = board[pNewRow][pNewCol];
 
     if (target && target.color !== piece.color) {
       moves.push({
         from: [pRow, pCol],
-        to: [newPRow, newPCol],
+        to: [pNewRow, pNewCol],
       });
     }
   }
