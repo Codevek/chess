@@ -1,1 +1,1 @@
-it's a basic js chess-engine 
+it's a basic js chess-engine which consists all chess methods in the game.js. Nd having all pieces movement inside moves directory inside src
