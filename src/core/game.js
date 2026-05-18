@@ -66,6 +66,16 @@ export class Chess {
     //changeTurn
     this.turn = this.turn === "w" ? "b" : "w";
 
+    //pawnPromotionToQueen
+    if (piece.type === "p") {
+      if (piece.color === "w" && toRow === 0) {
+        piece.type = "q";
+      }
+      if (piece.color === "b" && toRow === 7) {
+        piece.type = "q";
+      }
+    }
+
     return true;
   }
 
@@ -148,24 +158,39 @@ export class Chess {
   }
 
   getAllLegalMoves(color) {
-    const sameColorPiecesPos = [];
+    const allLegalMoves = [];
+
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
-        if (this.board[r][c]?.color === color) {
-          const piecePos = [r, c]
-          sameColorPiecesPos.push(piecePos);
-        }
-        else continue
+        const piece = this.board[r][c];
+
+        if (!piece) continue;
+
+        if (piece.color !== color) continue;
+
+        const legalMoves = this.getLegalMoves(r, c);
+
+        allLegalMoves.push(...legalMoves);
       }
     }
-    const allLegalMoves = []
-    for(const [rowPos, colPos] of sameColorPiecesPos){
-      const legalMoves = this.getLegalMoves(rowPos, colPos)
-      allLegalMoves.push(...legalMoves)
+
+    return allLegalMoves;
+  }
+
+  isCheckmate(color) {
+    const inCheck = this.isKingInCheck(color);
+    if (!inCheck) {
+      return false;
     }
-    
-    console.log(allLegalMoves);
-    
-    return allLegalMoves
+    const legalMoves = this.getAllLegalMoves(color);
+    return legalMoves.length === 0;
+  }
+  isStalemate(color) {
+    const inCheck = this.isKingInCheck(color);
+    if (inCheck) {
+      return false;
+    }
+    const legalMoves = this.getAllLegalMoves(color);
+    return legalMoves.length === 0;
   }
 }
