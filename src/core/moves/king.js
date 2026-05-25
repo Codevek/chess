@@ -1,7 +1,16 @@
 import { parseFEN } from "../fen.js";
 import { isInsideBoard } from "../utils.js";
+// import { isSquareAttacked } from "../game.js";
 
-export function getKingMoves(board, pRow, pCol, piece) {
+// let includeCastle
+export function getKingMoves(
+  game,
+  board,
+  pRow,
+  pCol,
+  piece,
+  includeCastle = true,
+) {
   const moves = [];
   const direction = [
     [-1, 0], //top
@@ -31,6 +40,90 @@ export function getKingMoves(board, pRow, pCol, piece) {
         from: [pRow, pCol],
         to: [pNewRow, pNewCol],
       });
+    }
+  }
+
+  //castling moves
+  if (includeCastle) {
+    //WHITE
+    if (piece.color === "w" && pRow === 7 && pCol === 4) {
+      //white kingSide
+      if (game.castlingRights.w.kingSide) {
+        if (board[7][5] === null && board[7][6] === null) {
+          if (
+            !game.isSquareAttacked(7, 4, "b") &&
+            !game.isSquareAttacked(7, 5, "b") &&
+            !game.isSquareAttacked(7, 6, "b")
+          ) {
+            moves.push({
+              from: [7, 4],
+              to: [7, 6],
+              castle: "w-kingSide",
+            });
+          }
+        }
+      }
+      //white queenSide
+      if (game.castlingRights.w.queenSide) {
+        if (
+          board[7][3] === null &&
+          board[7][2] === null &&
+          board[7][1] === null
+        ) {
+          if (
+            !game.isSquareAttacked(7, 4, "b") &&
+            !game.isSquareAttacked(7, 3, "b") &&
+            !game.isSquareAttacked(7, 2, "b")
+            // !game.isSquareAttacked(7, 1, "b")
+          ) {
+            moves.push({
+              from: [7, 4],
+              to: [7, 2],
+              castle: "w-queenSide",
+            });
+          }
+        }
+      }
+    }
+    //BLACK
+    if (piece.color === "b" && pRow === 0 && pCol === 4) {
+      //black kingSide
+      if (game.castlingRights.b.kingSide) {
+        if (board[0][5] === null && board[0][6] === null) {
+          if (
+            !game.isSquareAttacked(0, 4, "w") &&
+            !game.isSquareAttacked(0, 5, "w") &&
+            !game.isSquareAttacked(0, 6, "w")
+          ) {
+            moves.push({
+              from: [0, 4],
+              to: [0, 6],
+              castle: "b-kingSide",
+            });
+          }
+        }
+      }
+      //black queenSide
+      if (game.castlingRights.b.queenSide) {
+        if (
+          board[0][3] === null &&
+          board[0][2] === null &&
+          board[0][1] === null
+        ) {
+          if (
+            !game.isSquareAttacked(0, 4, "w") &&
+            !game.isSquareAttacked(0, 3, "w") &&
+            !game.isSquareAttacked(0, 2, "w")
+            // !game.isSquareAttacked(0, 1, "w")
+          ) {
+            moves.push({
+              from: [0, 4],
+              to: [0, 2],
+              castle: "b-queenSide",
+            });
+          }
+        }
+      }
     }
   }
 

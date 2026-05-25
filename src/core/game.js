@@ -27,13 +27,14 @@ export class Chess {
         queenSide: true,
       },
     };
+    this.enPassantTarget = null
   }
 
   getBoard() {
     return this.board;
   }
 
-  getMovesForPiece(pRow, pCol) {
+  getMovesForPiece(pRow, pCol, includeCastle = true) {
     const piece = this.board[pRow][pCol];
 
     if (!piece) return [];
@@ -55,7 +56,7 @@ export class Chess {
         return getKnightMoves(this.board, pRow, pCol, piece);
 
       case "k":
-        return getKingMoves(this.board, pRow, pCol, piece);
+        return getKingMoves(this, this.board, pRow, pCol, piece, includeCastle);
 
       default:
         return [];
@@ -107,20 +108,51 @@ export class Chess {
       //blackSide
       else {
         if (fromRow === 0 && fromCol === 0) {
-          this.castlingRights[b].queenSide = false;
+          this.castlingRights.b.queenSide = false;
         }
         if (fromRow === 0 && fromCol === 7) {
-          this.castlingRights[b].kingSide = false;
+          this.castlingRights.b.kingSide = false;
         }
       }
     }
-    console.log(this.castlingRights);
-    
+    // console.log(this.castlingRights);
+    if (moveMade.castle === "w-kingSide") {
+      this.board[7][5] = this.board[7][7];
+
+      this.board[7][7] = null;
+    }
+    if (moveMade.castle === "w-queenSide") {
+      this.board[7][3] = this.board[7][0];
+
+      this.board[7][0] = null;
+    }
+    if (moveMade.castle === "b-kingSide") {
+      this.board[0][5] = this.board[0][7];
+
+      this.board[0][7] = null;
+    }
+    if (moveMade.castle === "b-queenSide") {
+      this.board[0][3] = this.board[0][0];
+
+      this.board[0][0] = null;
+    }
+
+    //enPassant history logic
+    if(piece.type === "p" && Math.abs(toRow - fromRow) === 2){
+      const middleRow = (toRow+fromRow)/2
+      this.enPassantTarget = [
+        middleRow, fromCol
+      ]
+    }else{
+      this.enPassantTarget = null
+    }
+
 
     return true;
   }
 
   isSquareAttacked(row, col, byColor) {
+    let includeCastle = false
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
         const piece = this.board[r][c];
@@ -129,7 +161,7 @@ export class Chess {
 
         if (piece.color !== byColor) continue;
 
-        const moves = this.getMovesForPiece(r, c);
+        const moves = this.getMovesForPiece(r, c, false);
 
         for (const move of moves) {
           const [toRow, toCol] = move.to;
@@ -184,6 +216,7 @@ export class Chess {
     for (const move of pseudoMoves) {
       const boardBackup = structuredClone(this.board);
       const turnBackup = this.turn;
+      const castlingBackup = this.castlingRights
 
       //analyse or xpected move to check the legality
       this.makeMove(move);
@@ -194,6 +227,7 @@ export class Chess {
 
       this.board = boardBackup;
       this.turn = turnBackup;
+      this.castlingRights = castlingBackup
     }
     return legalMoves;
   }

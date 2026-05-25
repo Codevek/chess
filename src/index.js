@@ -1,10 +1,23 @@
 import { Chess } from "./core/game.js";
 
-const game = new Chess("K3R3/1Q4N1/1Bq1n1P1/1PP1P2P/8/7k/2r1p1b1/8 w - - 0 1");
+const game = new Chess("r3k2r/8/8/8/8/5r2/8/R3K2R w KQkq - 0 1");
 
-const moves = game.getMovesForPiece(6,4)
-console.log(moves);
-game.makeMove(moves[0])
+const moves1 = game.getLegalMoves(7,4)
+console.log(moves1);
 console.table(game.getBoard());
+game.makeMove({
+    from: [7,4],
+    to: [7,5]
+})
+console.table(game.getBoard());
+game.makeMove({
+    from: [7,5],
+    to: [7,4]
+})
+console.table(game.getBoard());
+const moves2 = game.getLegalMoves(7,4)
+console.log(moves2);
+
+
 
 
