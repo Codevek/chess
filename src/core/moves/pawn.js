@@ -1,7 +1,7 @@
 import { isInsideBoard } from "../utils.js";
 import { parseFEN } from "../fen.js";
 
-export function getPawnMoves(board, pRow, pCol, piece) {
+export function getPawnMoves(game, board, pRow, pCol, piece) {
   const moves = [];
 
   const rowDir = piece.color === "w" ? -1 : 1; //-1 from the W2B side and +1 from the B2W side
@@ -11,10 +11,7 @@ export function getPawnMoves(board, pRow, pCol, piece) {
   // singleForward Move
   const forwardRow = pRow + rowDir;
 
-  if (
-    isInsideBoard(forwardRow, pCol) &&
-    !board[forwardRow][pCol]
-  ) {
+  if (isInsideBoard(forwardRow, pCol) && !board[forwardRow][pCol]) {
     moves.push({
       from: [pRow, pCol],
       to: [forwardRow, pCol],
@@ -48,8 +45,16 @@ export function getPawnMoves(board, pRow, pCol, piece) {
         to: [pNewRow, pNewCol],
       });
     }
+    const [epRow, epCol] = game.enPassantTarget || [];
+    if (pNewRow === epRow && pNewCol === epCol) {
+      moves.push({
+        from: [pRow, pCol],
+        to: [pNewRow, pNewCol],
+        enPassant: true,
+      });
+    }
   }
-  
+
   // console.log(piece);
   return moves;
 }

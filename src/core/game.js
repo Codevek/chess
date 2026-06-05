@@ -27,6 +27,7 @@ export class Chess {
         queenSide: true,
       },
     };
+    const epField = fen.split(" ")[3];
     this.enPassantTarget = null
   }
 
@@ -41,7 +42,7 @@ export class Chess {
 
     switch (piece.type) {
       case "p":
-        return getPawnMoves(this.board, pRow, pCol, piece);
+        return getPawnMoves(this, this.board, pRow, pCol, piece);
 
       case "r":
         return getRookMoves(this.board, pRow, pCol, piece);
