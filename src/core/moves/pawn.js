@@ -46,12 +46,20 @@ export function getPawnMoves(game, board, pRow, pCol, piece) {
       });
     }
     const [epRow, epCol] = game.enPassantTarget || [];
-    if (pNewRow === epRow && pNewCol === epCol) {
+    const sidePawn = board[pRow][pNewCol];
+
+    if (
+      pNewRow === epRow &&
+      pNewCol === epCol &&
+      sidePawn &&
+      sidePawn.type === "p" &&
+      sidePawn.color !== piece.color
+    ) {
       moves.push({
         from: [pRow, pCol],
         to: [pNewRow, pNewCol],
         enPassant: true,
-      });
+      })
     }
   }
 
