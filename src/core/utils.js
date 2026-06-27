@@ -13,4 +13,4 @@ export function getNotation([row, col]){
   // console.log(notation);
   return notation
 }
-getNotation([4,6])
+// getNotation([4,6])

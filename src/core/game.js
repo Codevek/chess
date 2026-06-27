@@ -106,19 +106,19 @@ export class Chess {
 
       previousFullMoveNumber: this.fullMoveNumber,
     };
-    this.history.push(historyEntry);
 
+    
     if (!piece) return false;
-
+    
     //piece2NewPosition
     this.board[toRow][toCol] = piece;
     //emptyLastPosition
     this.board[fromRow][fromCol] = null;
     //changeTurn
     this.turn = this.turn === "w" ? "b" : "w";
-
+    
     let enPassantCapturedPiece = null;
-
+    
     if (moveMade.enPassant) {
       if (piece.color === "w") {
         enPassantCapturedPiece = structuredClone(this.board[toRow + 1][toCol]);
@@ -126,7 +126,9 @@ export class Chess {
         enPassantCapturedPiece = structuredClone(this.board[toRow - 1][toCol]);
       }
     }
-
+    historyEntry.enPassantCapturedPiece = enPassantCapturedPiece
+    this.history.push(historyEntry);
+    
     //enPassant capture removal
     if (moveMade.enPassant) {
       if (piece.color === "w") {
@@ -279,12 +281,6 @@ export class Chess {
     const legalMoves = [];
 
     for (const move of pseudoMoves) {
-      const boardBackup = structuredClone(this.board);
-      const turnBackup = this.turn;
-      const castlingBackup = structuredClone(this.castlingRights);
-      const enPassantBackup = structuredClone(this.enPassantTarget);
-      const halfMoveBackup = this.halfMoveClock;
-      const fullMoveBackup = this.fullMoveNumber;
 
       //analyse or xpected move to check the legality
       this.makeMove(move);
@@ -293,12 +289,7 @@ export class Chess {
         legalMoves.push(move);
       }
 
-      this.board = boardBackup;
-      this.turn = turnBackup;
-      this.castlingRights = castlingBackup;
-      this.enPassantTarget = enPassantBackup;
-      this.halfMoveClock = halfMoveBackup;
-      this.fullMoveNumber = fullMoveBackup;
+      this.undoMove()
     }
     return legalMoves;
   }
@@ -388,4 +379,24 @@ export class Chess {
 
     this.fullMoveNumber = historyEntry.previousFullMoveNumber;
   }
+
+  //Perft (Yaha tk pahuch gaya means kuch toh banaya hai)
+  perft(depth){
+    if(depth === 0) return 1
+    
+    let nodes = 0
+    // for(let i=1; i<=depth; i++){
+    const moves = this.getAllLegalMoves()
+      // console.log(moves);
+      
+      for (const move of moves) {
+        this.makeMove(move)
+         
+        nodes += this.perft(depth-1)
+        this.undoMove()
+      }
+    // }
+    return nodes
+  }
+
 }

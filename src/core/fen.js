@@ -56,11 +56,15 @@ export function generateFEN(game) {
           fenRow += mtCount;
           mtCount = 0;
         }
-        let symbol = piece.type;
-        if (piece.color === "w") {
-          symbol = symbol.toUpperCase();
+        if (!piece.type) {
+          throw new Error("Invalid piece on board");
+        } else {
+          let symbol = piece.type;
+          if (piece.color === "w") {
+            symbol = symbol.toUpperCase();
+          }
+          fenRow += symbol;
         }
-        fenRow += symbol;
       }
     }
     if (mtCount > 0) {
@@ -81,13 +85,12 @@ export function generateFEN(game) {
 
   if (enPassantTarget) {
     fen += " " + getNotation(enPassantTarget);
-  }
-  else fen += " "+"-"
+  } else fen += " " + "-";
 
   fen += " " + game.halfMoveClock;
   fen += " " + game.fullMoveNumber;
 
-  console.log(fen);
+  // console.log(fen);
 
   return fen;
 }
