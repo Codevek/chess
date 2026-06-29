@@ -18,21 +18,18 @@ export class Chess {
     this.turn = fen.split(" ")[1];
 
     const castleSide = fen.split(" ")[2];
-    if (castleSide === "-") {
-      this.castlingRights = null;
-    } else {
-      this.castlingRights = {
-        w: {
-          kingSide: castleSide.includes("K") ? true : false,
-          queenSide: castleSide.includes("Q") ? true : false,
-        },
 
-        b: {
-          kingSide: castleSide.includes("k") ? true : false,
-          queenSide: castleSide.includes("q") ? true : false,
-        },
-      };
-    }
+    this.castlingRights = {
+      w: {
+        kingSide: castleSide.includes("K"),
+        queenSide: castleSide.includes("Q"),
+      },
+      b: {
+        kingSide: castleSide.includes("k"),
+        queenSide: castleSide.includes("q"),
+      },
+    };
+
     const epField = fen.split(" ")[3];
 
     if (epField === "-") {
@@ -107,18 +104,17 @@ export class Chess {
       previousFullMoveNumber: this.fullMoveNumber,
     };
 
-    
     if (!piece) return false;
-    
+
     //piece2NewPosition
     this.board[toRow][toCol] = piece;
     //emptyLastPosition
     this.board[fromRow][fromCol] = null;
     //changeTurn
     this.turn = this.turn === "w" ? "b" : "w";
-    
+
     let enPassantCapturedPiece = null;
-    
+
     if (moveMade.enPassant) {
       if (piece.color === "w") {
         enPassantCapturedPiece = structuredClone(this.board[toRow + 1][toCol]);
@@ -126,9 +122,9 @@ export class Chess {
         enPassantCapturedPiece = structuredClone(this.board[toRow - 1][toCol]);
       }
     }
-    historyEntry.enPassantCapturedPiece = enPassantCapturedPiece
+    historyEntry.enPassantCapturedPiece = enPassantCapturedPiece;
     this.history.push(historyEntry);
-    
+
     //enPassant capture removal
     if (moveMade.enPassant) {
       if (piece.color === "w") {
@@ -174,6 +170,14 @@ export class Chess {
         }
       }
     }
+
+    if (capturedPiece?.type === "r") {
+      if (toRow === 7 && toCol === 0) this.castlingRights.w.queenSide = false;
+      if (toRow === 7 && toCol === 7) this.castlingRights.w.kingSide = false;
+      if (toRow === 0 && toCol === 0) this.castlingRights.b.queenSide = false;
+      if (toRow === 0 && toCol === 7) this.castlingRights.b.kingSide = false;
+    }
+
     // console.log(this.castlingRights);
     if (moveMade.castle === "w-kingSide") {
       this.board[7][5] = this.board[7][7];
@@ -219,7 +223,7 @@ export class Chess {
   }
 
   isSquareAttacked(row, col, byColor) {
-    let includeCastle = false;
+    // let includeCastle = false;
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
         const piece = this.board[r][c];
@@ -281,7 +285,6 @@ export class Chess {
     const legalMoves = [];
 
     for (const move of pseudoMoves) {
-
       //analyse or xpected move to check the legality
       this.makeMove(move);
 
@@ -289,7 +292,7 @@ export class Chess {
         legalMoves.push(move);
       }
 
-      this.undoMove()
+      this.undoMove();
     }
     return legalMoves;
   }
@@ -381,22 +384,21 @@ export class Chess {
   }
 
   //Perft (Yaha tk pahuch gaya means kuch toh banaya hai)
-  perft(depth){
-    if(depth === 0) return 1
-    
-    let nodes = 0
-    // for(let i=1; i<=depth; i++){
-    const moves = this.getAllLegalMoves()
-      // console.log(moves);
-      
-      for (const move of moves) {
-        this.makeMove(move)
-         
-        nodes += this.perft(depth-1)
-        this.undoMove()
-      }
-    // }
-    return nodes
-  }
+  perft(depth) {
+    if (depth === 0) return 1;
 
+    let nodes = 0;
+    // for(let i=1; i<=depth; i++){
+    const moves = this.getAllLegalMoves();
+    // console.log(moves);
+
+    for (const move of moves) {
+      this.makeMove(move);
+
+      nodes += this.perft(depth - 1);
+      this.undoMove();
+    }
+    // }
+    return nodes;
+  }
 }

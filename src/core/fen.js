@@ -74,14 +74,14 @@ export function generateFEN(game) {
   }
   fen += rows.join("/");
   fen += " " + turn + " ";
-  if (castlingRights !== null) {
-    if (castlingRights.w.kingSide === true) fen += "K";
-    if (castlingRights.w.queenSide === true) fen += "Q";
-    if (castlingRights.b.kingSide === true) fen += "k";
-    if (castlingRights.b.queenSide === true) fen += "q";
-  } else {
-    fen += "-";
-  }
+  let castle = "";
+
+  if (castlingRights.w.kingSide) castle += "K";
+  if (castlingRights.w.queenSide) castle += "Q";
+  if (castlingRights.b.kingSide) castle += "k";
+  if (castlingRights.b.queenSide) castle += "q";
+
+  fen += castle === "" ? "-" : castle;
 
   if (enPassantTarget) {
     fen += " " + getNotation(enPassantTarget);
