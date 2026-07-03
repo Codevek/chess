@@ -1,26 +1,29 @@
-import { Chess } from "chess-engine";
+import Square from "./Square";
 
-export default function Board() {
-  const game = new Chess();
-  const board = game.getBoard();
+export default function Board({ board, onSquareClick, selectedSquare, legalMoves, lastMove}) {
+  const squares = [];
+  for (let row = 0; row < board.length; row++) {
+    for (let col = 0; col < 8; col++) {
+      squares.push(
+        <Square
+          key={`${row} - ${col}`}
+          row={row}
+          col={col}
+          piece={board[row][col]}
+          selectedSquare={selectedSquare}
+          legalMoves={legalMoves}
+          lastMove={lastMove}
+          // inCheck = {inCheck}
 
-  console.log(board);
+          onClick={onSquareClick}
+        />,
+      );
+    }
+  }
 
   return (
-    <div className="w-166 h-166 bg-amber-200 ">
-      <div className="grid grid-cols-8 w-160 h-160">
-        {board.flatMap((row, rowIndex) =>
-          row.map((_, colIndex) => {
-            const isLight = (rowIndex + colIndex) % 2 === 0;
-            return (
-              <div
-                key={`${rowIndex}-${colIndex}`}
-                className={`w-20 h-20 ${isLight ? "bg-[#b5bbe1]" : "bg-[#ffffff]"}`}
-              />
-            );
-          }),
-        )}
-      </div>
+    <div className="grid grid-cols-8 aspect-square w-[min(8vw, 640px)]">
+      {squares}
     </div>
   );
 }
