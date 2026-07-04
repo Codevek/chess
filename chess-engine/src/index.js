@@ -11,7 +11,7 @@ const game = new Chess();
 
 for (let i = 0; i < 50; i++) {
   console.table(game.getBoard());
-  if (game.getTurn() === "w") {
+  // if (game.getTurn() === "w") {
     const moves = game.getAllLegalMoves();
     console.log(moves);
 
@@ -24,9 +24,9 @@ for (let i = 0; i < 50; i++) {
     game.makeMove(moves[answer]);
     // console.log(generateFEN(game));
     rl.close(); // Remember to close the stream to exit the process
-  }
-  else{
-   const move = findBestMove(game, 3)
-   game.makeMove(move)
-  }
+  // }
+  // else{
+  //  const move = findBestMove(game, 3)
+  //  game.makeMove(move)
+  // }
 }

@@ -8,6 +8,7 @@ export default function Square({
   selectedSquare,
   legalMoves,
   lastMove,
+  kingInCheck
 }) {
   // console.log(row,col);
   const isLight = (row + col) % 2;
@@ -22,6 +23,7 @@ export default function Square({
         (lastMove.from[0] === row && lastMove.from[1] === col) ||
         (lastMove.to[0] === row && lastMove.to[1] === col)
     );
+  const isKingInCheck = kingInCheck && kingInCheck[0] === row && kingInCheck[1] === col
     // console.log(legalMoves);
     
 
@@ -34,6 +36,7 @@ export default function Square({
             ${isSelected ? "bg-green-300" : ""}
             ${isLegalMove ? "bg-blue-300" : ""}
             ${isLastMove ? "bg-amber-600" : ""}
+            ${isKingInCheck? "bg-red-800": ""}
             
         `}
       onClick={() => onClick(row, col)}

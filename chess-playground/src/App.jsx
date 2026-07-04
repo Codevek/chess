@@ -2,33 +2,54 @@ import { Chess } from "chess-engine";
 import Board from "./components/board/Board";
 import ChessPiece from "./components/board/ChessPiece";
 import { useState } from "react";
+import GameOver from "./components/GameOver";
 
 export default function App() {
-  const [game] = useState(
-    () => new Chess("2K5/2P2PnP/pB1k1b2/8/p3B2Q/1Ppqp3/8/8 w - - 0 1"),
+  const [game, setGame] = useState(
+    () => new Chess( "2K5/2P2PnP/pB1k1b2/8/p3B2Q/1Ppqp3/8/8 w - - 0 1")
   );
+
+  // "2K5/2P2PnP/pB1k1b2/8/p3B2Q/1Ppqp3/8/8 w - - 0 1"
   const [selectedSquare, setSelectedSquare] = useState(null);
   const [legalMoves, setLegalMoves] = useState([]);
   const [_, forceUpdate] = useState(0);
   const [lastMove, setLastMove] = useState(null)
-  // const [inCheck, setInCheck] = useState(false)
+  const [kingInCheck, setKingInCheck] = useState(null)
+  const [gameResult, setGameResult] = useState(null)
 
+  
   const clearSelection = () => {
     setSelectedSquare(null);
   };
   const clearLegalMoves = () => {
     setLegalMoves([]);
   };
-
+  
   function handleSquareClick(row, col) {
+    if(gameResult) return
     const board = game.getBoard();
     const piece = board[row][col];
+    const turn = game.getTurn()
 
-    if (!selectedSquare && piece && piece.color === game.getTurn()) {
+
+    if(game.isCheckmate(turn)){
+      setGameResult({
+        type: "checkmate",
+        winner: turn === "w" ? "black": "white"
+      })
+    }
+    else if(game.isStalemate(turn)){
+      setGameResult({
+        type: "stalemate"
+      })
+    }
+
+
+    if (!selectedSquare && piece && piece.color === turn) {
       setSelectedSquare([row, col]);
       const moves = game.getLegalMoves(row, col);
+      console.log(moves);
       setLegalMoves(moves);
-      // console.log(moves);
 
       return;
     }
@@ -48,6 +69,11 @@ export default function App() {
           from: selectedSquare,
           to: [row, col],
         });
+        const inCheck = game.isKingInCheck(game.getTurn())
+
+        setKingInCheck(inCheck? game.findKing(game.getTurn()): null)
+
+
         setLastMove({
           from: selectedSquare,
           to: [row, col],
@@ -92,6 +118,15 @@ export default function App() {
     
   }
 
+  function restart(){
+    setGame(new Chess())
+    clearSelection()
+    clearLegalMoves()
+    setLastMove(null)
+    setKingInCheck(null)
+    setGameResult(null)
+  }
+
   return (
     <main className="min-h-screen bg-zinc-900 flex justify-center items-center">
       <Board
@@ -99,10 +134,15 @@ export default function App() {
         selectedSquare={selectedSquare}
         legalMoves={legalMoves}
         lastMove = {lastMove}
-        // inCheck = {inCheck}
-        // kingPos = {kingPos}
+        kingInCheck = {kingInCheck}
         onSquareClick={handleSquareClick}
       />
+      {gameResult && (
+        <GameOver
+          result = {gameResult}
+          game = {restart}
+        />
+      )}
     </main>
   );
 }

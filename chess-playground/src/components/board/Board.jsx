@@ -1,6 +1,6 @@
 import Square from "./Square";
 
-export default function Board({ board, onSquareClick, selectedSquare, legalMoves, lastMove}) {
+export default function Board({ board, onSquareClick, selectedSquare, legalMoves, lastMove, kingInCheck}) {
   const squares = [];
   for (let row = 0; row < board.length; row++) {
     for (let col = 0; col < 8; col++) {
@@ -13,7 +13,7 @@ export default function Board({ board, onSquareClick, selectedSquare, legalMoves
           selectedSquare={selectedSquare}
           legalMoves={legalMoves}
           lastMove={lastMove}
-          // inCheck = {inCheck}
+          kingInCheck={kingInCheck}
 
           onClick={onSquareClick}
         />,
