@@ -3,49 +3,36 @@ import Board from "./components/board/Board";
 import ChessPiece from "./components/board/ChessPiece";
 import { useState } from "react";
 import GameOver from "./components/GameOver";
+import Table from "./components/HistoryPanel";
+import HistoryPanel from "./components/HistoryPanel";
 
 export default function App() {
   const [game, setGame] = useState(
-    () => new Chess( "2K5/2P2PnP/pB1k1b2/8/p3B2Q/1Ppqp3/8/8 w - - 0 1")
+    () => new Chess("2K5/2P2PnP/pB1k1b2/8/p3B2Q/1Ppqp3/8/8 w - - 0 1"),
   );
 
   // "2K5/2P2PnP/pB1k1b2/8/p3B2Q/1Ppqp3/8/8 w - - 0 1"
   const [selectedSquare, setSelectedSquare] = useState(null);
   const [legalMoves, setLegalMoves] = useState([]);
   const [_, forceUpdate] = useState(0);
-  const [lastMove, setLastMove] = useState(null)
-  const [kingInCheck, setKingInCheck] = useState(null)
-  const [gameResult, setGameResult] = useState(null)
+  const [lastMove, setLastMove] = useState(null);
+  const [kingInCheck, setKingInCheck] = useState(null);
+  const [gameResult, setGameResult] = useState(null);
+  const [history, setHistory] = useState([]);
 
-  
   const clearSelection = () => {
     setSelectedSquare(null);
   };
   const clearLegalMoves = () => {
     setLegalMoves([]);
   };
-  
+
   function handleSquareClick(row, col) {
-    if(gameResult) return
+    if (gameResult) return;
     const board = game.getBoard();
     const piece = board[row][col];
-    const turn = game.getTurn()
 
-
-    if(game.isCheckmate(turn)){
-      setGameResult({
-        type: "checkmate",
-        winner: turn === "w" ? "black": "white"
-      })
-    }
-    else if(game.isStalemate(turn)){
-      setGameResult({
-        type: "stalemate"
-      })
-    }
-
-
-    if (!selectedSquare && piece && piece.color === turn) {
+    if (!selectedSquare && piece && piece.color === game.getTurn()) {
       setSelectedSquare([row, col]);
       const moves = game.getLegalMoves(row, col);
       console.log(moves);
@@ -69,19 +56,37 @@ export default function App() {
           from: selectedSquare,
           to: [row, col],
         });
-        const inCheck = game.isKingInCheck(game.getTurn())
 
-        setKingInCheck(inCheck? game.findKing(game.getTurn()): null)
+        if (game.isCheckmate(game.getTurn())) {
+          setGameResult({
+            type: "checkmate",
+            winner: game.getTurn() === "w" ? "black" : "white",
+          });
+        } else if (game.isStalemate(game.getTurn())) {
+          setGameResult({
+            type: "stalemate",
+          });
+        }
 
+        const playedMove = {
+          from: selectedSquare,
+          to: [row, col],
+        };
+
+        setHistory((prevStateValue) => [...prevStateValue, playedMove]);
+
+        const inCheck = game.isKingInCheck(game.getTurn());
+
+        setKingInCheck(inCheck ? game.findKing(game.getTurn()) : null);
 
         setLastMove({
           from: selectedSquare,
           to: [row, col],
-        })
+        });
         // const [isKingInCheck, kingPos]= game.isKingInCheck(game.getTurn())
         // setInCheck(isKingInCheck)
         // console.log(lastMove);
-        
+
         clearSelection();
         clearLegalMoves();
         forceUpdate((value) => value + 1);
@@ -115,16 +120,15 @@ export default function App() {
     //   forceUpdate((value) => value + 1);
     // }
     // console.log(lastMove);
-    
   }
 
-  function restart(){
-    setGame(new Chess())
-    clearSelection()
-    clearLegalMoves()
-    setLastMove(null)
-    setKingInCheck(null)
-    setGameResult(null)
+  function restart() {
+    setGame(new Chess());
+    clearSelection();
+    clearLegalMoves();
+    setLastMove(null);
+    setKingInCheck(null);
+    setGameResult(null);
   }
 
   return (
@@ -133,16 +137,18 @@ export default function App() {
         board={game.getBoard()}
         selectedSquare={selectedSquare}
         legalMoves={legalMoves}
-        lastMove = {lastMove}
-        kingInCheck = {kingInCheck}
+        lastMove={lastMove}
+        kingInCheck={kingInCheck}
         onSquareClick={handleSquareClick}
       />
-      {gameResult && (
-        <GameOver
-          result = {gameResult}
-          game = {restart}
-        />
-      )}
+      {gameResult && <GameOver 
+        result={gameResult} 
+        game={restart} 
+      />}
+      
+      <HistoryPanel
+        history = {history}
+      />
     </main>
   );
 }
