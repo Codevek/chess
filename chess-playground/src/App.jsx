@@ -3,7 +3,6 @@ import Board from "./components/board/Board";
 import ChessPiece from "./components/board/ChessPiece";
 import { useState } from "react";
 import GameOver from "./components/GameOver";
-import Table from "./components/HistoryPanel";
 import HistoryPanel from "./components/HistoryPanel";
 
 export default function App() {
@@ -69,8 +68,23 @@ export default function App() {
         }
 
         const playedMove = {
+          piece: piece.type,
+
+          color: piece.color,
+
           from: selectedSquare,
+
           to: [row, col],
+
+          captured: move.captured ?? null,
+
+          promotion: move.promotion ?? null,
+
+          castle: move.castle ?? null,
+
+          check: false,
+
+          mate: false,
         };
 
         setHistory((prevStateValue) => [...prevStateValue, playedMove]);
@@ -129,10 +143,19 @@ export default function App() {
     setLastMove(null);
     setKingInCheck(null);
     setGameResult(null);
+    setHistory([]);
   }
 
   return (
-    <main className="min-h-screen bg-zinc-900 flex justify-center items-center">
+    <main
+      className="
+  min-h-screen
+  bg-zinc-900
+  flex
+  justify-center
+  items-start
+  gap-14 pt-10"
+    >
       <Board
         board={game.getBoard()}
         selectedSquare={selectedSquare}
@@ -141,14 +164,9 @@ export default function App() {
         kingInCheck={kingInCheck}
         onSquareClick={handleSquareClick}
       />
-      {gameResult && <GameOver 
-        result={gameResult} 
-        game={restart} 
-      />}
-      
-      <HistoryPanel
-        history = {history}
-      />
+      {gameResult && <GameOver result={gameResult} game={restart} />}
+
+      <HistoryPanel history={history} />
     </main>
   );
 }
