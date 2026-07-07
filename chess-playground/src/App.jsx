@@ -4,6 +4,11 @@ import ChessPiece from "./components/board/ChessPiece";
 import { useState } from "react";
 import GameOver from "./components/GameOver";
 import HistoryPanel from "./components/HistoryPanel";
+import PlayerCard from "./components/player/playerCard";
+import avatar1 from "./assets/avtars/avatar1.jpg";
+import avatar2 from "./assets/avtars/avatar2.jpg";
+import GameStatus from "./components/GameStatus";
+
 
 export default function App() {
   const [game, setGame] = useState(
@@ -28,13 +33,14 @@ export default function App() {
 
   function handleSquareClick(row, col) {
     if (gameResult) return;
+
     const board = game.getBoard();
     const piece = board[row][col];
 
     if (!selectedSquare && piece && piece.color === game.getTurn()) {
       setSelectedSquare([row, col]);
       const moves = game.getLegalMoves(row, col);
-      console.log(moves);
+      // console.log(moves);
       setLegalMoves(moves);
 
       return;
@@ -42,7 +48,8 @@ export default function App() {
 
     if (selectedSquare) {
       const move = legalMoves.find((m) => m.to[0] === row && m.to[1] === col);
-      console.log(move);
+      const movingPiece = board[selectedSquare[0]][selectedSquare[1]];
+      // console.log(move);
 
       // if (!move) {
       //   if (piece.color === game.getTurn()) {
@@ -68,19 +75,15 @@ export default function App() {
         }
 
         const playedMove = {
-          piece: piece.type,
+          piece: movingPiece.type,
 
-          color: piece.color,
+          color: movingPiece.color,
 
           from: selectedSquare,
 
           to: [row, col],
 
           captured: move.captured ?? null,
-
-          promotion: move.promotion ?? null,
-
-          castle: move.castle ?? null,
 
           check: false,
 
@@ -153,20 +156,41 @@ export default function App() {
   bg-zinc-900
   flex
   justify-center
-  items-start
-  gap-14 pt-10"
+  items-center
+  gap-14"
     >
-      <Board
-        board={game.getBoard()}
-        selectedSquare={selectedSquare}
-        legalMoves={legalMoves}
-        lastMove={lastMove}
-        kingInCheck={kingInCheck}
-        onSquareClick={handleSquareClick}
-      />
-      {gameResult && <GameOver result={gameResult} game={restart} />}
+      <div className="flex flex-col justify-between gap-150">
+        <PlayerCard
+          avatar={avatar1}
+          name="Magnus Carlsen"
+          country="NOR"
+          rating="2830"
+          time={671}
+        />
+        <PlayerCard
+          avatar={avatar2}
+          name="Vivek Sharma"
+          country="IND"
+          rating="5000"
+          time={771}
+        />
+      </div>
+      <div className="flex flex-col items-center">
+        <Board
+          board={game.getBoard()}
+          selectedSquare={selectedSquare}
+          legalMoves={legalMoves}
+          lastMove={lastMove}
+          kingInCheck={kingInCheck}
+          onSquareClick={handleSquareClick}
+        />
+        <GameStatus
+          text = "Checkmate !"
+        />
+      </div>
 
       <HistoryPanel history={history} />
+      {gameResult && <GameOver result={gameResult} game={restart} />}
     </main>
   );
 }

@@ -27,6 +27,7 @@ export function getQueenMoves(board, pRow, pCol, piece) {
         moves.push({
           from: [pRow, pCol],
           to: [pNewRow, pNewCol],
+          captured: target
         });
       }
 
@@ -34,6 +35,7 @@ export function getQueenMoves(board, pRow, pCol, piece) {
         moves.push({
           from: [pRow, pCol],
           to: [pNewRow, pNewCol],
+          captured: target
         });
         break
       }

@@ -17,7 +17,8 @@ export function getRookMoves(board, pRow, pCol, piece) {
         if(piece.color !== element.color){
           moves.push({
             from: [pRow, pCol],
-            to: [pRow, i]
+            to: [pRow, i],
+            captured: element
           })
           break; 
         }else{
@@ -27,6 +28,7 @@ export function getRookMoves(board, pRow, pCol, piece) {
       moves.push({
         from: [pRow, pCol],
         to: [pRow, i],
+        captured: element
       });
       
     }
@@ -37,7 +39,8 @@ export function getRookMoves(board, pRow, pCol, piece) {
         if(piece.color !== element.color){
           moves.push({
             from: [pRow, pCol],
-            to: [pRow, i]
+            to: [pRow, i],
+            captured: element
           })
           break; 
         }else{
@@ -47,6 +50,7 @@ export function getRookMoves(board, pRow, pCol, piece) {
       moves.push({
         from: [pRow, pCol],
         to: [pRow, i],
+        captured: element
       });
     }
 
@@ -60,6 +64,7 @@ export function getRookMoves(board, pRow, pCol, piece) {
           moves.push({
           from: [pRow, pCol],
           to: [i, pCol],
+          captured: element
         });
           break; 
         }else{
@@ -69,6 +74,7 @@ export function getRookMoves(board, pRow, pCol, piece) {
       moves.push({
         from: [pRow, pCol],
         to: [i, pCol],
+        captured: element
       });
     }
     // checking bottom of the rook
@@ -79,6 +85,7 @@ export function getRookMoves(board, pRow, pCol, piece) {
           moves.push({
           from: [pRow, pCol],
           to: [i, pCol],
+          captured: element
         });
           break; 
         }else{
@@ -88,6 +95,7 @@ export function getRookMoves(board, pRow, pCol, piece) {
       moves.push({
         from: [pRow, pCol],
         to: [i, pCol],
+        captured: element
       });
     } 
 

@@ -15,6 +15,7 @@ export function getPawnMoves(game, board, pRow, pCol, piece) {
     moves.push({
       from: [pRow, pCol],
       to: [forwardRow, pCol],
+      captured: null
     });
 
     // doubleForward Move
@@ -26,6 +27,7 @@ export function getPawnMoves(game, board, pRow, pCol, piece) {
       moves.push({
         from: [pRow, pCol],
         to: [pRow + 2 * rowDir, pCol],
+        captured: null
       });
     }
   }
@@ -43,6 +45,7 @@ export function getPawnMoves(game, board, pRow, pCol, piece) {
       moves.push({
         from: [pRow, pCol],
         to: [pNewRow, pNewCol],
+        captured: target
       });
     }
     const [epRow, epCol] = game.enPassantTarget || [];
@@ -59,6 +62,7 @@ export function getPawnMoves(game, board, pRow, pCol, piece) {
         from: [pRow, pCol],
         to: [pNewRow, pNewCol],
         enPassant: true,
+        captured: target
       })
     }
   }

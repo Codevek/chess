@@ -22,6 +22,7 @@ export function getBishopMoves(board, pRow, pCol, piece) {
         moves.push({
           from: [pRow, pCol],
           to: [pNewRow, pNewCol],
+          captured: target
         });
       }
 
@@ -29,6 +30,7 @@ export function getBishopMoves(board, pRow, pCol, piece) {
         moves.push({
           from: [pRow, pCol],
           to: [pNewRow, pNewCol],
+          captured: target
         });
         break
       }

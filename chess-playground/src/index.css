@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+.history::-webkit-scrollbar{
+
+    display:none;
+    /* overflow-y: scroll */
+
+}

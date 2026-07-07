@@ -34,11 +34,13 @@ export function getKingMoves(
       moves.push({
         from: [pRow, pCol],
         to: [pNewRow, pNewCol],
+        captured: target
       });
     } else if (target.color !== piece.color) {
       moves.push({
         from: [pRow, pCol],
         to: [pNewRow, pNewCol],
+        captured: target
       });
     }
   }

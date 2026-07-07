@@ -11,7 +11,7 @@ import qW from "../../assets/pieces/qW.svg"
 import rB from "../../assets/pieces/rB.svg"
 import rW from "../../assets/pieces/rW.svg"
 
-const PIECES = {
+export const PIECES = {
     bB, bW,
     kB, kW,
     nB, nW,
