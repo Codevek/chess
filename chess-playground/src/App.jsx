@@ -1,4 +1,4 @@
-import { Chess } from "chess-engine";
+import { Chess, generateFEN } from "chess-engine";
 import Board from "./components/board/Board";
 import ChessPiece from "./components/board/ChessPiece";
 import { useState } from "react";
@@ -8,7 +8,7 @@ import PlayerCard from "./components/player/playerCard";
 import avatar1 from "./assets/avtars/avatar1.jpg";
 import avatar2 from "./assets/avtars/avatar2.jpg";
 import GameStatus from "./components/GameStatus";
-
+import CapturedPieces from "./components/CapturedPieces";
 
 export default function App() {
   const [game, setGame] = useState(
@@ -74,6 +74,8 @@ export default function App() {
           });
         }
 
+        console.log(generateFEN(game))
+
         const playedMove = {
           piece: movingPiece.type,
 
@@ -91,6 +93,7 @@ export default function App() {
         };
 
         setHistory((prevStateValue) => [...prevStateValue, playedMove]);
+        // console.log(history);
 
         const inCheck = game.isKingInCheck(game.getTurn());
 
@@ -184,13 +187,14 @@ export default function App() {
           kingInCheck={kingInCheck}
           onSquareClick={handleSquareClick}
         />
-        <GameStatus
-          text = "Checkmate !"
-        />
+        <GameStatus text="Checkmate !" />
       </div>
-
-      <HistoryPanel history={history} />
-      {gameResult && <GameOver result={gameResult} game={restart} />}
+      <div className="flex flex-col justify-between gap-20">
+        { <CapturedPieces history={history} color={"b"}/>}
+        <HistoryPanel history={history} />
+        {gameResult && <GameOver result={gameResult} game={restart} />}
+        { <CapturedPieces history={history} color={"w"}/>}
+      </div>
     </main>
   );
 }
