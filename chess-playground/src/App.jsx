@@ -74,7 +74,7 @@ export default function App() {
           });
         }
 
-        console.log(generateFEN(game))
+        console.log(generateFEN(game));
 
         const playedMove = {
           piece: movingPiece.type,
@@ -152,6 +152,36 @@ export default function App() {
     setHistory([]);
   }
 
+  const VALUES = {
+    p: 1,
+    n: 3,
+    b: 3,
+    r: 5,
+    q: 9,
+  };
+
+  function getCapturedPieces(history, color) {
+    return history.filter(
+      (move) => move.captured !== null && move.color === color,
+    );
+  }
+
+  function getScore(capturedPieces) {
+    return capturedPieces.reduce((acc, move) => {
+      return acc + (VALUES[move.captured.type] || 0);
+    }, 0);
+  }
+
+  const capturedByWhite = getCapturedPieces(history, "w");
+  const capturedByBlack = getCapturedPieces(history, "b");
+
+  const scoreWhite = getScore(capturedByWhite);
+  const scoreBlack = getScore(capturedByBlack);
+
+  const relativeWhite = scoreWhite > scoreBlack ? "+"+(scoreWhite-scoreBlack): null
+
+  const relativeBlack = scoreBlack > scoreWhite ? "+"+(scoreBlack-scoreWhite): null
+
   return (
     <main
       className="
@@ -189,11 +219,11 @@ export default function App() {
         />
         <GameStatus text="Checkmate !" />
       </div>
-      <div className="flex flex-col justify-between gap-20">
-        { <CapturedPieces history={history} color={"b"}/>}
+      <div className="flex flex-col justify-between gap-15">
+        { <CapturedPieces pieces={capturedByBlack} score={relativeBlack} />}
         <HistoryPanel history={history} />
         {gameResult && <GameOver result={gameResult} game={restart} />}
-        { <CapturedPieces history={history} color={"w"}/>}
+        { <CapturedPieces pieces={capturedByWhite} score={relativeWhite} />}
       </div>
     </main>
   );
