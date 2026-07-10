@@ -9,6 +9,8 @@ import avatar1 from "./assets/avtars/avatar1.jpg";
 import avatar2 from "./assets/avtars/avatar2.jpg";
 import GameStatus from "./components/GameStatus";
 import CapturedPieces from "./components/CapturedPieces";
+import MenuLayout from "./components/leftPanel/MenuLayout";
+import LeftPanel from "./components/leftPanel/LeftPanel";
 
 export default function App() {
   const [game, setGame] = useState(
@@ -178,9 +180,11 @@ export default function App() {
   const scoreWhite = getScore(capturedByWhite);
   const scoreBlack = getScore(capturedByBlack);
 
-  const relativeWhite = scoreWhite > scoreBlack ? "+"+(scoreWhite-scoreBlack): null
+  const relativeWhite =
+    scoreWhite > scoreBlack ? "+" + (scoreWhite - scoreBlack) : null;
 
-  const relativeBlack = scoreBlack > scoreWhite ? "+"+(scoreBlack-scoreWhite): null
+  const relativeBlack =
+    scoreBlack > scoreWhite ? "+" + (scoreBlack - scoreWhite) : null;
 
   return (
     <main
@@ -192,7 +196,7 @@ export default function App() {
   items-center
   gap-14"
     >
-      <div className="flex flex-col justify-between gap-150">
+      <div className="flex flex-col justify-between gap-20">
         <PlayerCard
           avatar={avatar1}
           name="Magnus Carlsen"
@@ -200,6 +204,7 @@ export default function App() {
           rating="2830"
           time={671}
         />
+        <LeftPanel/>
         <PlayerCard
           avatar={avatar2}
           name="Vivek Sharma"
@@ -220,10 +225,10 @@ export default function App() {
         <GameStatus text="Checkmate !" />
       </div>
       <div className="flex flex-col justify-between gap-15">
-        { <CapturedPieces pieces={capturedByBlack} score={relativeBlack} />}
+        {<CapturedPieces pieces={capturedByBlack} score={relativeBlack} />}
         <HistoryPanel history={history} />
         {gameResult && <GameOver result={gameResult} game={restart} />}
-        { <CapturedPieces pieces={capturedByWhite} score={relativeWhite} />}
+        {<CapturedPieces pieces={capturedByWhite} score={relativeWhite} />}
       </div>
     </main>
   );
