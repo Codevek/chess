@@ -25,6 +25,7 @@ export default function App() {
   const [kingInCheck, setKingInCheck] = useState(null);
   const [gameResult, setGameResult] = useState(null);
   const [history, setHistory] = useState([]);
+  const [flipped, setFlipped] = useState(false)
 
   const clearSelection = () => {
     setSelectedSquare(null);
@@ -122,29 +123,9 @@ export default function App() {
         }
       }
     }
-
-    // console.log("CLicked: ", row, col);
-    // setSelectedSquare([row, col]);
-    // setLegalMoves(moves);
-    // // console.log(moves);
-    // if (moves.some((move) => move.from[0] === row && move.from[1] === col)) {
-    //   console.log(selectedSquare);
-    //   setSelectedSquare([row,col])
-
-    //   game.makeMove(
-    //     {
-    //       from: selectedSquare,
-    //       to: selectedSquare
-    //     }
-    //   );
-    //   clearSelection();
-    //   clearLegalMoves();
-    //   forceUpdate((value) => value + 1);
-    // }
-    // console.log(lastMove);
   }
 
-  function restart() {
+  function handleNewGame() {
     setGame(new Chess());
     clearSelection();
     clearLegalMoves();
@@ -152,6 +133,9 @@ export default function App() {
     setKingInCheck(null);
     setGameResult(null);
     setHistory([]);
+    // console.log("newgame");
+    
+    // forceUpdate(value=> value+1)
   }
 
   const VALUES = {
@@ -174,27 +158,33 @@ export default function App() {
     }, 0);
   }
 
+  function handleFlipBoard(){
+    setFlipped(p=>!p)
+    // console.log("yep");
+  }
+
   const capturedByWhite = getCapturedPieces(history, "w");
   const capturedByBlack = getCapturedPieces(history, "b");
 
   const scoreWhite = getScore(capturedByWhite);
   const scoreBlack = getScore(capturedByBlack);
 
-  const relativeWhite =
-    scoreWhite > scoreBlack ? "+" + (scoreWhite - scoreBlack) : null;
+  const relativeWhite = scoreWhite > scoreBlack ? "+" + (scoreWhite - scoreBlack) : null;
 
-  const relativeBlack =
-    scoreBlack > scoreWhite ? "+" + (scoreBlack - scoreWhite) : null;
+  const relativeBlack = scoreBlack > scoreWhite ? "+" + (scoreBlack - scoreWhite) : null;
+
+
+  
 
   return (
     <main
       className="
-  min-h-screen
-  bg-zinc-900
-  flex
-  justify-center
-  items-center
-  gap-14"
+      min-h-screen
+      bg-zinc-900
+      flex
+      justify-center
+      items-center
+      gap-14"
     >
       <div className="flex flex-col justify-between gap-20">
         <PlayerCard
@@ -204,7 +194,10 @@ export default function App() {
           rating="2830"
           time={671}
         />
-        <LeftPanel/>
+        <LeftPanel 
+          onNewGame={handleNewGame} 
+          onFlipBoard={handleFlipBoard}
+        />
         <PlayerCard
           avatar={avatar2}
           name="Vivek Sharma"
@@ -221,13 +214,14 @@ export default function App() {
           lastMove={lastMove}
           kingInCheck={kingInCheck}
           onSquareClick={handleSquareClick}
+          flipped={flipped}
         />
         <GameStatus text="Checkmate !" />
       </div>
       <div className="flex flex-col justify-between gap-15">
         {<CapturedPieces pieces={capturedByBlack} score={relativeBlack} />}
         <HistoryPanel history={history} />
-        {gameResult && <GameOver result={gameResult} game={restart} />}
+        {gameResult && <GameOver result={gameResult} game={handleNewGame} />}
         {<CapturedPieces pieces={capturedByWhite} score={relativeWhite} />}
       </div>
     </main>

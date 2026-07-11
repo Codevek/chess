@@ -11,7 +11,9 @@ export default function BentoButton({
   particleCount,
   glowColor,
   onClick
-}) {
+})
+{
+  
   return (
     <ParticleCard
       className={`
@@ -31,7 +33,7 @@ export default function BentoButton({
       enableMagnetism={enableMagnetism}
       particleCount={particleCount}
       glowColor={glowColor}
-      onClick={onClick}
+      onClick = {onClick}
     >
       <h2>{title}</h2>
       <p>{description}</p>

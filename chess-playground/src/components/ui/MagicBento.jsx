@@ -218,7 +218,9 @@ export const ParticleCard = ({
     };
 
     const handleClick = (e) => {
-      onClick?.(e);  
+      onClick?.(e) 
+    //   console.log("hey");
+        
       if (!clickEffect) return;
 
       const rect = element.getBoundingClientRect();
@@ -291,6 +293,7 @@ export const ParticleCard = ({
       ref={cardRef}
       className={`${className} relative overflow-hidden`}
       style={{ ...style, position: "relative", overflow: "hidden" }}
+      onClick={onClick}
     >
       {children}
     </div>
@@ -454,6 +457,8 @@ const MagicBento = ({
   glowColor = DEFAULT_GLOW_COLOR,
   clickEffect = true,
   enableMagnetism = true,
+  onNewGame,
+  onFlipBoard
 }) => {
   const gridRef = useRef(null);
   const shouldDisableAnimations = disableAnimations;
@@ -477,7 +482,8 @@ const MagicBento = ({
           enableMagnetism={enableMagnetism}
           particleCount={particleCount}
           glowColor={glowColor}
-          onClick={onClick}
+          onNewGame={onNewGame}
+          onFlipBoard={onFlipBoard}
         />
       </section>
     </>
