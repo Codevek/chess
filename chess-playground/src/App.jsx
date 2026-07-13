@@ -11,6 +11,7 @@ import GameStatus from "./components/GameStatus";
 import CapturedPieces from "./components/CapturedPieces";
 import MenuLayout from "./components/leftPanel/MenuLayout";
 import LeftPanel from "./components/leftPanel/LeftPanel";
+import BoardCoordinates from "./components/board/BoardCoordinates";
 
 export default function App() {
   const [game, setGame] = useState(
@@ -25,7 +26,7 @@ export default function App() {
   const [kingInCheck, setKingInCheck] = useState(null);
   const [gameResult, setGameResult] = useState(null);
   const [history, setHistory] = useState([]);
-  const [flipped, setFlipped] = useState(false)
+  const [flipped, setFlipped] = useState(false);
 
   const clearSelection = () => {
     setSelectedSquare(null);
@@ -133,8 +134,10 @@ export default function App() {
     setKingInCheck(null);
     setGameResult(null);
     setHistory([]);
+    console.log(game);
+
     // console.log("newgame");
-    
+
     // forceUpdate(value=> value+1)
   }
 
@@ -158,9 +161,8 @@ export default function App() {
     }, 0);
   }
 
-  function handleFlipBoard(){
-    setFlipped(p=>!p)
-    // console.log("yep");
+  function handleFlipBoard() {
+    setFlipped((p) => !p);
   }
 
   const capturedByWhite = getCapturedPieces(history, "w");
@@ -169,60 +171,99 @@ export default function App() {
   const scoreWhite = getScore(capturedByWhite);
   const scoreBlack = getScore(capturedByBlack);
 
-  const relativeWhite = scoreWhite > scoreBlack ? "+" + (scoreWhite - scoreBlack) : null;
+  const relativeWhite =
+    scoreWhite > scoreBlack ? "+" + (scoreWhite - scoreBlack) : null;
 
-  const relativeBlack = scoreBlack > scoreWhite ? "+" + (scoreBlack - scoreWhite) : null;
+  const relativeBlack =
+    scoreBlack > scoreWhite ? "+" + (scoreBlack - scoreWhite) : null;
 
+  const topPlayer = flipped
+    ? {
+        avatar: avatar2,
+        name: "Vivek Sharma",
+        country: "IND",
+        rating: 5000,
+        time: 771,
+      }
+    : {
+        avatar: avatar1,
+        name: "Magnus Carlsen",
+        country: "NOR",
+        rating: 2830,
+        time: 671,
+      };
 
-  
+  const bottomPlayer = flipped
+    ? {
+        avatar: avatar1,
+        name: "Magnus Carlsen",
+        country: "NOR",
+        rating: 2830,
+        time: 671,
+      }
+    : {
+        avatar: avatar2,
+        name: "Vivek Sharma",
+        country: "IND",
+        rating: 5000,
+        time: 771,
+      };
+
+  const topCaptured = flipped
+    ? {
+        pieces: capturedByWhite,
+        score: relativeWhite,
+      }
+    : {
+        pieces: capturedByBlack,
+        score: relativeBlack,
+      };
+  const bottomCaptured = flipped
+    ? {
+        pieces: capturedByBlack,
+        score: relativeBlack,
+      }
+    : {
+        pieces: capturedByWhite,
+        score: relativeWhite,
+      };
 
   return (
     <main
       className="
       min-h-screen
-      bg-zinc-900
+      bg-[#1b1b20]
       flex
+      overflow-hidden
       justify-center
       items-center
       gap-14"
     >
       <div className="flex flex-col justify-between gap-20">
-        <PlayerCard
-          avatar={avatar1}
-          name="Magnus Carlsen"
-          country="NOR"
-          rating="2830"
-          time={671}
-        />
-        <LeftPanel 
-          onNewGame={handleNewGame} 
-          onFlipBoard={handleFlipBoard}
-        />
-        <PlayerCard
-          avatar={avatar2}
-          name="Vivek Sharma"
-          country="IND"
-          rating="5000"
-          time={771}
-        />
+        <PlayerCard {...topPlayer} />
+        <LeftPanel onNewGame={handleNewGame} onFlipBoard={handleFlipBoard} />
+        <PlayerCard {...bottomPlayer} />
       </div>
-      <div className="flex flex-col items-center">
-        <Board
-          board={game.getBoard()}
-          selectedSquare={selectedSquare}
-          legalMoves={legalMoves}
-          lastMove={lastMove}
-          kingInCheck={kingInCheck}
-          onSquareClick={handleSquareClick}
-          flipped={flipped}
-        />
+      <div className="flex flex-col items-center gap-10">
+        <div className="relative">
+          <Board
+            board={game.getBoard()}
+            selectedSquare={selectedSquare}
+            legalMoves={legalMoves}
+            lastMove={lastMove}
+            kingInCheck={kingInCheck}
+            onSquareClick={handleSquareClick}
+            flipped={flipped}
+          />
+          <BoardCoordinates flipped={flipped} />
+        </div>
         <GameStatus text="Checkmate !" />
       </div>
       <div className="flex flex-col justify-between gap-15">
-        {<CapturedPieces pieces={capturedByBlack} score={relativeBlack} />}
+        {<CapturedPieces {...topCaptured} />}
         <HistoryPanel history={history} />
         {gameResult && <GameOver result={gameResult} game={handleNewGame} />}
-        {<CapturedPieces pieces={capturedByWhite} score={relativeWhite} />}
+        {<CapturedPieces {...bottomCaptured} />}
       </div>
     </main>
   );

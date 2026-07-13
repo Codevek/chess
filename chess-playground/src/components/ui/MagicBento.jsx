@@ -293,7 +293,7 @@ export const ParticleCard = ({
       ref={cardRef}
       className={`${className} relative overflow-hidden`}
       style={{ ...style, position: "relative", overflow: "hidden" }}
-      onClick={onClick}
+      // onClick={handleClick}
     >
       {children}
     </div>

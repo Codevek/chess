@@ -6,3 +6,6 @@
     /* overflow-y: scroll */
 
 }
+*{
+    user-select: none;
+}
