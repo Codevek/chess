@@ -5,20 +5,6 @@ function squareName(square) {
   return files[square[1]] + (8 - square[0]);
 }
 
-// const PIECES = {
-//   p: "♟️",
-
-//   n: "♞",
-
-//   b: "♝",
-
-//   r: "♜",
-
-//   q: "♛",
-
-//   k: "♚",
-// };
-
 function moveText(move) {
   if (!move) return "";
 

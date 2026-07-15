@@ -46,7 +46,7 @@ export default function Board({
 
   return (
     <div
-      className="grid grid-cols-8 aspect-square w-[min(8vw, 640px)] rounded-lg overflow-hidden shadow-2xl"
+      className="grid grid-cols-8 aspect-square w-[min(8vw, 640px)] rounded-sm overflow-hidden shadow-2xl"
     >
       {squares}
     </div>
