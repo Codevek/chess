@@ -1,3 +1,4 @@
+import { act } from "react";
 import { ParticleCard } from "../ui/MagicBento";
 
 export default function BentoButton({
@@ -9,11 +10,11 @@ export default function BentoButton({
   enableTilt,
   enableMagnetism,
   particleCount,
-  glowColor,
+  active,
   onClick
-})
-{
-  
+}) {
+  const enableParticles = true;
+
   return (
     <ParticleCard
       className={`
@@ -26,16 +27,28 @@ export default function BentoButton({
         border-[#2F293A]
         bg-[#120F17]
         select-none
+        ${active ? "border-3 border-purple-500 bg-[#1A1325]" : "border-[#2F293A]"}
         ${className} 
       `}
       clickEffect={clickEffect}
       enableTilt={enableTilt}
       enableMagnetism={enableMagnetism}
-      particleCount={particleCount}
-      glowColor={glowColor}
-      onClick = {onClick}
+      particleCount={enableParticles ? particleCount : 0}
+      glowColor={active ? "124,58,237" : "132,0,255"}
+      onClick={onClick}
+      active={active}
     >
-      <h2>{title}</h2>
+      <h2
+        className={`
+          text-3xl
+          font-semibold
+          transition-all
+          duration-300
+          ${active ? "text-purple-300" : "text-[#f5e6b8]"}
+          `}
+      >
+        {title}
+      </h2>
       <p>{description}</p>
       {children}
     </ParticleCard>

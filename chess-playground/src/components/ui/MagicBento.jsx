@@ -52,7 +52,7 @@ export const ParticleCard = ({
   enableTilt = true,
   clickEffect = false,
   enableMagnetism = false,
-  onClick
+  onClick,
 }) => {
   const cardRef = useRef(null);
   const particlesRef = useRef([]);
@@ -218,10 +218,13 @@ export const ParticleCard = ({
     };
 
     const handleClick = (e) => {
-      onClick?.(e) 
-    //   console.log("hey");
-        
+      console.log("ParticleCard clicked");
+
+      onClick?.(e);
+
       if (!clickEffect) return;
+
+      console.log("Ripple should start");
 
       const rect = element.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -458,7 +461,7 @@ const MagicBento = ({
   clickEffect = true,
   enableMagnetism = true,
   onNewGame,
-  onFlipBoard
+  onFlipBoard,
 }) => {
   const gridRef = useRef(null);
   const shouldDisableAnimations = disableAnimations;

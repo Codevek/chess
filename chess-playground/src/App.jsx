@@ -1,4 +1,5 @@
-import HomeScreen from "./screens/HomeScreen"
+import BoardScreen from "./screens/BoardScreen/BoardScreen"
+import HomeScreen from "./screens/HomeScreen/HomeScreen"
 
 export default function App(){
     return <HomeScreen/>

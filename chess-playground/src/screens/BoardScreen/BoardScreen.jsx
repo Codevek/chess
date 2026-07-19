@@ -1,17 +1,17 @@
 import { Chess, generateFEN } from "chess-engine";
-import Board from "../components/board/Board";
-import ChessPiece from "../components/board/ChessPiece";
+import Board from "../../components/board/Board";
+import ChessPiece from "../../components/board/ChessPiece";
 import { useState } from "react";
-import GameOver from "../components/GameOver";
-import HistoryPanel from "../components/HistoryPanel";
-import PlayerCard from "../components/player/playerCard";
-import avatar1 from "../assets/avtars/avatar1.jpg";
-import avatar2 from "../assets/avtars/avatar2.jpg";
-import GameStatus from "../components/GameStatus";
-import CapturedPieces from "../components/CapturedPieces";
-import MenuLayout from "../components/leftPanel/MenuLayout";
-import LeftPanel from "../components/leftPanel/LeftPanel";
-import BoardCoordinates from "../components/board/BoardCoordinates";
+import GameOver from "../../components/GameOver";
+import HistoryPanel from "../../components/HistoryPanel";
+import PlayerCard from "../../components/player/playerCard";
+import avatar1 from "../../assets/avtars/avatar1.jpg";
+import avatar2 from "../../assets/avtars/avatar2.jpg";
+import GameStatus from "../../components/GameStatus";
+import CapturedPieces from "../../components/CapturedPieces";
+import MenuLayout from "../../components/leftPanel/MenuLayout";
+import LeftPanel from "../../components/leftPanel/LeftPanel";
+import BoardCoordinates from "../../components/board/BoardCoordinates";
 
 export default function BoardScreen() {
   const [game, setGame] = useState(
