@@ -1,4 +1,3 @@
-import { act } from "react";
 import { ParticleCard } from "../ui/MagicBento";
 
 export default function BentoButton({
@@ -6,7 +5,7 @@ export default function BentoButton({
   description,
   className,
   children,
-  clickEffect,
+  clickEffect = true,
   enableTilt,
   enableMagnetism,
   particleCount,

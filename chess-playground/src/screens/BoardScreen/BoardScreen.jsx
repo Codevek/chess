@@ -12,6 +12,7 @@ import CapturedPieces from "../../components/CapturedPieces";
 import MenuLayout from "../../components/leftPanel/MenuLayout";
 import LeftPanel from "../../components/leftPanel/LeftPanel";
 import BoardCoordinates from "../../components/board/BoardCoordinates";
+import TopMenu from "../HomeScreen/TopMenu";
 
 export default function BoardScreen() {
   const [game, setGame] = useState(
