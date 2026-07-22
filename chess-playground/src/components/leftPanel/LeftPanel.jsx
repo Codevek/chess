@@ -1,13 +1,10 @@
-import MagicBento from "../ui/MagicBento";
+import MenuLayout from "./MenuLayout";
 
-export default function LeftPanel({onNewGame, onFlipBoard}) {
-  // if(onFlipBoard) console.log("hey");
+export default function LeftPanel({ onNewGame, onFlipBoard }) {
   return (
-    <div className="w-85 h-105">
-      <MagicBento 
-        onNewGame= {onNewGame}
-        onFlipBoard={onFlipBoard}
-       />
-    </div>
+   <MenuLayout
+    onNewGame={onNewGame}
+    onFlipBoard={onFlipBoard}
+   />
   );
 }

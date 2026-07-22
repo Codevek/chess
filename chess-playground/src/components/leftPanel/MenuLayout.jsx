@@ -1,4 +1,5 @@
-import BentoButton from "./BentoButton";
+import BentoButton from "../ui/MagicBento/BentoButton";
+import MagicBento from "../ui/MagicBento/MagicBento";
 
 export default function MenuLayout({
   clickEffect,
@@ -7,7 +8,7 @@ export default function MenuLayout({
   particleCount,
   glowColor,
   onNewGame,
-  onFlipBoard
+  onFlipBoard,
 }) {
   const menuItems = [
     { title: "New Game", class: "col-span-3", action: onNewGame },
@@ -17,26 +18,26 @@ export default function MenuLayout({
     { title: "Chat" },
     { title: "Analysis", class: "col-span-2" },
   ];
-  
-  
 
   return (
-    <div className="grid grid-cols-3 grid-rows-4 gap-3 w-full h-full">
-      {menuItems.map((item, index) => {
-        return (
+    // The wrapper provides these settings to all buttons automatically
+    <MagicBento
+      clickEffect={clickEffect}
+      enableTilt={enableTilt}
+      enableMagnetism={enableMagnetism}
+      particleCount={particleCount}
+      glowColor={glowColor}
+    >
+      <div className="grid grid-cols-3 grid-rows-4 gap-3 w-full h-full">
+        {menuItems.map((item, index) => (
           <BentoButton
             key={index}
             className={item.class}
             title={item.title}
             onClick={item.action}
-            clickEffect={clickEffect}
-            enableTilt={enableTilt}
-            enableMagnetism={enableMagnetism}
-            particleCount={particleCount}
-            glowColor={glowColor}
           />
-        );
-      })}
-    </div>
+        ))}
+      </div>
+    </MagicBento>
   );
 }

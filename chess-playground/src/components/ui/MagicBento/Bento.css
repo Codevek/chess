@@ -12,40 +12,6 @@
     --purple-border: rgba(132, 0, 255, 0.8);
   }
   
-  /* .card-responsive {
-    grid-template-columns: 1fr;
-    width: 90%;
-    margin: 0 auto;
-    padding: 0.5rem;
-  }
-  
-  @media (min-width: 600px) {
-    .card-responsive {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  
-  @media (min-width: 1024px) {
-    .card-responsive {
-      grid-template-columns: repeat(4, 1fr);
-    }
-    
-    .card-responsive .card:nth-child(3) {
-      grid-column: span 2;
-      grid-row: span 2;
-    }
-    
-    .card-responsive .card:nth-child(4) {
-      grid-column: 1 / span 2;
-      grid-row: 2 / span 2;
-    }
-    
-    .card-responsive .card:nth-child(6) {
-      grid-column: 4;
-      grid-row: 3;
-    }
-  } */
-  
   .card--border-glow::after {
     content: '';
     position: absolute;

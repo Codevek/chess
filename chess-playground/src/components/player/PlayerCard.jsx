@@ -8,7 +8,7 @@ export default function PlayerCard({ avatar, name, rating, country, time }) {
         alt={name}
         className="w-14 h-14 rounded-full object-cover border border-zinc-600" 
       />
-      <Timer time={time}/>
+      {time && <Timer time={time}/>}
       <div className="flex flex-col">
         <h2 className="text-white text-lg font-medium leading-none">
             {name}
