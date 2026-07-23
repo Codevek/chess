@@ -1,30 +1,58 @@
 import Stack from "@/components/ui/Stack/Stack";
+import easy from "../../../assets/bots/easy.png";
+import med from "../../../assets/bots/med.png";
+import hard from "../../../assets/bots/hard.png";
+import god from "../../../assets/bots/god.png";
 
-export default function Bot() {
-  const images = [
-    "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?q=80&w=500&auto=format",
-    "https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=500&auto=format",
-    "https://images.unsplash.com/photo-1452626212852-811d58933cae?q=80&w=500&auto=format",
-    "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?q=80&w=500&auto=format",
+export default function BotDifficultySelector() {
+  const botLevels = [
+    {
+      id: "god",
+      value: 4,
+      content: (
+        <img src={god} alt="" className="select-none [-webkit-user-drag:none]"/>
+        // <img src={hard} alt="" />
+      )
+    },
+    {
+      id: "hard",
+      value: 3,
+      content: (
+        // <img src={god} alt={id} />
+        <img src={hard} alt="" className="select-none [-webkit-user-drag:none]"/>
+      )
+    },
+    {
+      id: "medium",
+      value: 2,
+      content: (
+        <img src={med} alt="" className="select-none [-webkit-user-drag:none]"/>
+        
+      )
+    },
+    {
+      id: "easy",
+      value: 1,
+      content: (
+        <img src={easy} alt="" className="select-none [-webkit-user-drag:none]"/>
+      )
+    }
   ];
+
+  const handleDifficultyChange = (selectedCard) => {
+    console.log("Currently selected bot difficulty:", selectedCard.id);
+    // Call your game logic setup here
+    // e.g., setBotLevel(selectedCard.value)
+  };
+
   return (
-    <div style={{ width: 208, height: 208 }}>
-      <Stack
-        randomRotation={false}
-        sensitivity={200}
-        sendToBackOnClick={true}
-        cards={images.map((src, i) => (
-          <img
-            key={i}
-            src={src}
-            alt={`card-${i + 1}`}
-            style={{ width: "100%", height: "100%", objectFit: "cover", userSelect: "none"}}
-            className="select-none [-webkit-user-drag:none]"
-          />
-        ))}
-        autoplay={true}
-        autoplayDelay={3000}
-        pauseOnHover={true}
+    <div className="flex justify-center items-center">
+      <Stack 
+        cards={botLevels} 
+        onActiveCardChange={handleDifficultyChange}
+        width="w-50"       // Easy control of width
+        height="h-80"      // Easy control of height
+        randomRotation={true}
       />
     </div>
   );

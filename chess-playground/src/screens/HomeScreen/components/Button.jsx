@@ -1,6 +1,6 @@
 import SpecularButton from "@/components/ui/SpecularButton/SpecularButton";
 
-export default function Button() {
+export default function Button({onClick}) {
   return (
     <SpecularButton
       size="lg"
@@ -19,7 +19,7 @@ export default function Button() {
       followMouse
       proximity={250}
       autoAnimate
-      onClick={() => console.log("clicked")}
+      onClick={onClick}
     >
       Get Started
     </SpecularButton>

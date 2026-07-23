@@ -12,12 +12,13 @@ import CapturedPieces from "../../components/CapturedPieces";
 import MenuLayout from "../../components/leftPanel/MenuLayout";
 import LeftPanel from "../../components/leftPanel/LeftPanel";
 import BoardCoordinates from "../../components/board/BoardCoordinates";
+import HomeScreen from "../HomeScreen/HomeScreen";
+import newGame from "../../../../chess-engine/src/index.js"
 
-export default function BoardScreen() {
-  const [game, setGame] = useState(
-    () => new Chess("2K5/2P2PnP/pB1k1b2/8/p3B2Q/1Ppqp3/8/8 w - - 0 1"),
-  );
-
+export default function BoardScreen({onQuit}) {
+  const [game, setGame] = useState(() => new Chess("2K5/2P2PnP/pB1k1b2/8/p3B2Q/1Ppqp3/8/8 w - - 0 1"))
+  
+  
   // "2K5/2P2PnP/pB1k1b2/8/p3B2Q/1Ppqp3/8/8 w - - 0 1"
   const [selectedSquare, setSelectedSquare] = useState(null);
   const [legalMoves, setLegalMoves] = useState([]);
@@ -227,6 +228,12 @@ export default function BoardScreen() {
         pieces: capturedByWhite,
         score: relativeWhite,
       };
+    
+  const quitHandler = ()=>{
+    return(
+      <HomeScreen/>
+    )
+  }
 
   return (
     <main
@@ -241,7 +248,7 @@ export default function BoardScreen() {
     >
       <div className="flex flex-col justify-between gap-20 items-center">
         <PlayerCard {...topPlayer} />
-        <LeftPanel onNewGame={handleNewGame} onFlipBoard={handleFlipBoard} />
+        <LeftPanel onNewGame={handleNewGame} onFlipBoard={handleFlipBoard} onQuit={onQuit} />
         <PlayerCard {...bottomPlayer} />
       </div>
       <div className="flex flex-col items-center gap-10">

@@ -9,6 +9,7 @@ export default function MenuLayout({
   glowColor,
   onNewGame,
   onFlipBoard,
+  onQuit
 }) {
   const menuItems = [
     { title: "New Game", class: "col-span-3", action: onNewGame },
@@ -16,7 +17,7 @@ export default function MenuLayout({
     { title: "Flip", action: onFlipBoard },
     { title: "Settings" },
     { title: "Chat" },
-    { title: "Analysis", class: "col-span-2" },
+    { title: "Quit", class: "col-span-2", action: onQuit},
   ];
 
   return (

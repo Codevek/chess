@@ -26,38 +26,38 @@ function CardRotate({ children, onSendToBack, sensitivity, disableDrag = false }
 
   return (
     <motion.div
-      className="absolute inset-0 cursor-grab"
+      className="absolute inset-0 cursor-grab active:cursor-grabbing"
       style={{ x, y, rotateX, rotateY }}
       drag
       dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
       dragElastic={0.6}
-      whileTap={{ cursor: 'grabbing' }}
-      onDragEnd={handleDragEnd}>
+      onDragEnd={handleDragEnd}
+    >
       {children}
     </motion.div>
   );
 }
 
 export default function Stack({
+  cards = [],
+  width = "w-64",      
+  height = "h-80",     
+  onActiveCardChange,  
   randomRotation = false,
   sensitivity = 200,
-  cards = [],
   animationConfig = { stiffness: 260, damping: 20 },
-  sendToBackOnClick = false,
-  autoplay = false,
-  autoplayDelay = 3000,
-  pauseOnHover = false,
+  sendToBackOnClick = true, 
   mobileClickOnly = false,
   mobileBreakpoint = 768
 }) {
   const [isMobile, setIsMobile] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
+  const [stack, setStack] = useState(() => {
+    return cards.map((card, index) => ({ ...card, internalId: index + 1 }));
+  });
 
+  // Handle mobile detection
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < mobileBreakpoint);
-    };
-
+    const checkMobile = () => setIsMobile(window.innerWidth < mobileBreakpoint);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -66,97 +66,47 @@ export default function Stack({
   const shouldDisableDrag = mobileClickOnly && isMobile;
   const shouldEnableClick = sendToBackOnClick || shouldDisableDrag;
 
-  const [stack, setStack] = useState(() => {
-    if (cards.length) {
-      return cards.map((content, index) => ({ id: index + 1, content }));
-    } else {
-      return [
-        {
-          id: 1,
-          content: (
-            <img
-              src="https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?q=80&w=500&auto=format"
-              alt="card-1"
-              className="w-full h-full object-cover pointer-events-none select-none" />
-          )
-        },
-        {
-          id: 2,
-          content: (
-            <img
-              src="https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=500&auto=format"
-              alt="card-2"
-              className="w-full h-full object-cover pointer-events-none select-none" />
-          )
-        },
-        {
-          id: 3,
-          content: (
-            <img
-              src="https://images.unsplash.com/photo-1452626212852-811d58933cae?q=80&w=500&auto=format"
-              alt="card-3"
-              className="w-full h-full object-cover pointer-events-none select-none" />
-          )
-        },
-        {
-          id: 4,
-          content: (
-            <img
-              src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c?q=80&w=500&auto=format"
-              alt="card-4"
-              className="w-full h-full object-cover pointer-events-none select-none" />
-          )
-        }
-      ];
-    }
-  });
-
+ 
   useEffect(() => {
     if (cards.length) {
-      setStack(cards.map((content, index) => ({ id: index + 1, content })));
+      setStack(cards.map((card, index) => ({ ...card, internalId: index + 1 })));
     }
   }, [cards]);
 
-  const sendToBack = id => {
-    setStack(prev => {
+ 
+  useEffect(() => {
+    if (stack.length > 0 && onActiveCardChange) {
+
+      const topCard = stack[stack.length - 1];
+      onActiveCardChange(topCard);
+    }
+  }, [stack, onActiveCardChange]);
+
+  const sendToBack = (id) => {
+    setStack((prev) => {
       const newStack = [...prev];
-      const index = newStack.findIndex(card => card.id === id);
+      const index = newStack.findIndex((card) => card.internalId === id);
       const [card] = newStack.splice(index, 1);
-      newStack.unshift(card);
+      newStack.unshift(card); 
       return newStack;
     });
   };
 
-  useEffect(() => {
-    if (autoplay && stack.length > 1 && !isPaused) {
-      const interval = setInterval(() => {
-        const topCardId = stack[stack.length - 1].id;
-        sendToBack(topCardId);
-      }, autoplayDelay);
-
-      return () => clearInterval(interval);
-    }
-  }, [autoplay, autoplayDelay, stack, isPaused]);
-
   return (
-    <div
-      className="relative w-full h-full"
-      style={{
-        perspective: 600
-      }}
-      onMouseEnter={() => pauseOnHover && setIsPaused(true)}
-      onMouseLeave={() => pauseOnHover && setIsPaused(false)}>
+  
+    <div className={`relative ${width} ${height}`} style={{ perspective: 600 }}>
       {stack.map((card, index) => {
         const randomRotate = randomRotation ? Math.random() * 10 - 5 : 0;
         return (
           <CardRotate
-            key={card.id}
-            onSendToBack={() => sendToBack(card.id)}
+            key={card.internalId}
+            onSendToBack={() => sendToBack(card.internalId)}
             sensitivity={sensitivity}
-            disableDrag={shouldDisableDrag}>
+            disableDrag={shouldDisableDrag}
+          >
             <motion.div
-              className="rounded-2xl overflow-hidden w-full h-full"
-              onClick={() => shouldEnableClick && sendToBack(card.id)}
+              className="rounded-2xl overflow-hidden w-full h-full shadow-lg"
+              onClick={() => shouldEnableClick && sendToBack(card.internalId)}
               animate={{
                 rotateZ: (stack.length - index - 1) * 4 + randomRotate,
                 scale: 1 + index * 0.06 - stack.length * 0.06,
@@ -167,7 +117,8 @@ export default function Stack({
                 type: 'spring',
                 stiffness: animationConfig.stiffness,
                 damping: animationConfig.damping
-              }}>
+              }}
+            >
               {card.content}
             </motion.div>
           </CardRotate>

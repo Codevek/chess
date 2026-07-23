@@ -6,7 +6,7 @@ import SettingsPanel from "./SettingsPanel";
 import FriendPanel from "./FriendPanel";
 import { MENU_MODE } from "@/lib/menuModes";
 
-export default function CenterPanel({ mode }) {
+export default function CenterPanel({ mode, onClick }) {
   let content;
 
   switch (mode) {
@@ -15,7 +15,7 @@ export default function CenterPanel({ mode }) {
       break;
 
     case MENU_MODE.NEW_GAME:
-      content = <NewGamePanel />;
+      content = <NewGamePanel onClick={onClick}/>;
       break;
 
     case MENU_MODE.ONLINE:
