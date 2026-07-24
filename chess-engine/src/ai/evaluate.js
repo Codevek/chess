@@ -29,23 +29,26 @@ export function evaluate(game) {
   const board = game.getBoard();
 
   for (let row=0; row<board.length; row++) {
-    for (let col=0; col<row.length; col++) {
+    for (let col=0; col<7; col++) {
       if (board[row][col] === null) continue;
+      
       const piece = board[row][col]
+      
+      // const table = PIECE_SQUARE_TABLES[piece.type]
 
-      const table = PIECE_SQUARE_TABLES[piece.type]
+      // const tableRow = piece.color === "w" ? row: 7-row 
+      // const bonus = table[tableRow][col] 
 
-      const tableRow = piece.color === "w" ? row: 7-row 
-      const bonus = table[tableRow][col] 
-
-      if (piece.color === "w") score += PIECE_VALUES[piece.type] + bonus
-      else score -= PIECE_VALUES[piece.type] + bonus
+      if (piece.color === "w") score += PIECE_VALUES[piece.type] 
+      else score -= PIECE_VALUES[piece.type]
     }
   }
-//   console.log(score);
+  // console.log(score);
 
   return score;
 }
 
 // const game = new Chess("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNB1KBNR w KQkq - 0 1");
+// // console.table(game.getBoard());
+
 // console.log(evaluate(game));

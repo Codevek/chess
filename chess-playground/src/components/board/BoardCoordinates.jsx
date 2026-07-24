@@ -15,7 +15,7 @@ export default function BoardCoordinates({ flipped }) {
         <>
             <div className="absolute -left-8.5 top-0 h-full flex flex-col justify-between py-8">
                 {displayRanks.map(rank=>(
-                    <span className="text-[#7c7468] text-[15px] font-medium">
+                    <span key={rank} className="text-[#7c7468] text-[15px] font-medium">
                         {rank}
                     </span>
                 ))}
@@ -23,7 +23,7 @@ export default function BoardCoordinates({ flipped }) {
 
             <div className="absolute -bottom-8.5 left-0 w-full flex justify-between px-8">
                 {displayFiles.map(file=>(
-                    <span className="text-[#7c7468] text-[15px] font-medium">
+                    <span key={file} className="text-[#7c7468] text-[15px] font-medium">
                         {file}
                     </span>
                 ))}

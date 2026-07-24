@@ -36,11 +36,13 @@ export function findBestMove(game, depth) {
       }
     }
   }
-  // console.log(bestMove);
-  // console.log(score);
+  console.log(bestMove);
+  console.log(score);
 
   return bestMove;
 }
+// const game = new Chess()
+// findBestMove(game, 3)
 
 export function minimax(game, depth, alpha, beta) {
   if (depth === 0) {

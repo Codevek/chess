@@ -5,8 +5,14 @@ import PracticePanel from "./PracticePanel";
 import SettingsPanel from "./SettingsPanel";
 import FriendPanel from "./FriendPanel";
 import { MENU_MODE } from "@/lib/menuModes";
+import { mod } from "three/src/nodes/math/OperatorNode.js";
 
-export default function CenterPanel({ mode, onClick }) {
+export default function CenterPanel({
+  mode,
+  onStart,
+  gameConfig,
+  setGameConfig,
+}) {
   let content;
 
   switch (mode) {
@@ -15,7 +21,14 @@ export default function CenterPanel({ mode, onClick }) {
       break;
 
     case MENU_MODE.NEW_GAME:
-      content = <NewGamePanel onClick={onClick}/>;
+      content = (
+        <NewGamePanel
+          onStart={() => onStart(gameConfig)}
+          gameConfig={gameConfig}
+          setGameConfig={setGameConfig}
+          mode={mode}
+        />
+      );
       break;
 
     case MENU_MODE.ONLINE:
@@ -38,11 +51,7 @@ export default function CenterPanel({ mode, onClick }) {
       content = <RecentGames />;
   }
 
-  const req = content
+  const req = content;
 
-  return (
-    <div>
-        {content}
-    </div>
-  );
+  return <div>{content}</div>;
 }

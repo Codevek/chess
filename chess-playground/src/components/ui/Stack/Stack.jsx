@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform } from 'motion/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 function CardRotate({ children, onSendToBack, sensitivity, disableDrag = false }) {
   const x = useMotionValue(0);
@@ -54,8 +54,10 @@ export default function Stack({
   const [stack, setStack] = useState(() => {
     return cards.map((card, index) => ({ ...card, internalId: index + 1 }));
   });
+  
+  // ADD THIS REF to track the last sent card
+  const lastReportedCard = useRef(null);
 
-  // Handle mobile detection
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < mobileBreakpoint);
     checkMobile();
@@ -66,19 +68,22 @@ export default function Stack({
   const shouldDisableDrag = mobileClickOnly && isMobile;
   const shouldEnableClick = sendToBackOnClick || shouldDisableDrag;
 
- 
   useEffect(() => {
     if (cards.length) {
       setStack(cards.map((card, index) => ({ ...card, internalId: index + 1 })));
     }
   }, [cards]);
 
- 
+  // UPDATE THIS USEEFFECT to check against the ref before firing
   useEffect(() => {
     if (stack.length > 0 && onActiveCardChange) {
-
       const topCard = stack[stack.length - 1];
-      onActiveCardChange(topCard);
+      
+      // Only trigger the parent callback if the top card is actually a different card
+      if (lastReportedCard.current !== topCard.id) {
+        lastReportedCard.current = topCard.id;
+        onActiveCardChange(topCard);
+      }
     }
   }, [stack, onActiveCardChange]);
 
@@ -93,7 +98,6 @@ export default function Stack({
   };
 
   return (
-  
     <div className={`relative ${width} ${height}`} style={{ perspective: 600 }}>
       {stack.map((card, index) => {
         const randomRotate = randomRotation ? Math.random() * 10 - 5 : 0;

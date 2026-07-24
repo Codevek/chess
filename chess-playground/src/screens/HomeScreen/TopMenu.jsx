@@ -9,6 +9,8 @@ export default function TopMenu({
   particleCount,
   glowColor,
   clickEffect,
+  gameConfig,
+  setGameConfig
 }) {
   const menuItems = [
     { id: "newgame", title: "New Game", class: "col-span-2 row-span-2" },
@@ -36,6 +38,10 @@ export default function TopMenu({
             glowColor={glowColor}
             onClick={() => {
               setMode(mode === item.id ? "home" : item.id);
+              setGameConfig(prev=>({
+                ...prev,
+                mode: item.id
+              }))
             }
           }
           />
