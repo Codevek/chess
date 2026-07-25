@@ -36,7 +36,14 @@ export default function CenterPanel({
       break;
 
     case MENU_MODE.PRACTICE:
-      content = <PracticePanel />;
+      content = (
+        <PracticePanel
+          onStart={() => onStart(gameConfig)}
+          gameConfig={gameConfig}
+          setGameConfig={setGameConfig}
+          mode={mode}
+        />
+      );
       break;
 
     case MENU_MODE.FRIEND:

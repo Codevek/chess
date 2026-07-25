@@ -185,18 +185,6 @@ export default function BoardScreen({ session }) {
     setHistory((prevStateValue) => [...prevStateValue, playedMove]);
   }
 
-  const isSelected =
-    selectedSquare && selectedSquare[0] === row && selectedSquare[1] === col;
-  const isLegalMove = legalMoves.some(
-    (move) => move.to[0] === row && move.to[1] === col,
-  );
-  const isLastMove =
-    lastMove &&
-    ((lastMove.from[0] === row && lastMove.from[1] === col) ||
-      (lastMove.to[0] === row && lastMove.to[1] === col));
-  const isKingInCheck =
-    kingInCheck && kingInCheck[0] === row && kingInCheck[1] === col;
-
   function handleNewGame() {
     setGame(new Chess());
     clearSelection();
