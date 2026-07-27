@@ -3,10 +3,10 @@ import Square from "./Square";
 export default function Board({
   board,
   onSquareClick,
-  isSelected,
-  isLastMove,
-  isKingInCheck,
-  isLegalMove,
+  selectedSquare,
+  lastMove,
+  kingInCheck,
+  legalMoves,
   flipped,
 }) {
   // console.log(flipped);
@@ -35,10 +35,10 @@ export default function Board({
           row={boardRow}
           col={boardCol}
           piece={displayBoard[row][col]}
-          isSelected={isSelected}
-          isLegalMove={isLegalMove}
-          isLastMove={isLastMove}
-          isKingInCheck={isKingInCheck}
+          selectedSquare={selectedSquare}
+          legalMoves={legalMoves}
+          lastMove={lastMove}
+          kingInCheck={kingInCheck}
           onClick={() => onSquareClick(actualRow, actualCol)}
         />,
       );

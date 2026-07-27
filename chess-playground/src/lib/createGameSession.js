@@ -8,7 +8,6 @@ export default function createGameSesssion(config) {
         : "white"
       : config.color;
   const botColor = playerColor === "white" ? "black" : "white";
-  const botDepth = BOT_DEPTH[config.difficulty];
 
   return {
     mode: config.mode,
@@ -16,6 +15,8 @@ export default function createGameSesssion(config) {
     difficulty: config.difficulty,
 
     depth: BOT_DEPTH[config.difficulty],
+
+    withBonus: config.difficulty === "hard"? false: true,
 
     playerColor,
 

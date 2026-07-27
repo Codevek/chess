@@ -1,7 +1,7 @@
 import { Chess } from "../core/game.js";
 import { evaluate } from "./evaluate.js";
 
-export function findBestMove(game, depth) {
+export function findBestMove(game, depth, withBonus) {
   const moves = game.getAllLegalMoves();
   let bestMove = null;
   let score;
@@ -15,7 +15,7 @@ export function findBestMove(game, depth) {
   if (game.getTurn() === "w") {
     for (const move of moves) {
       game.makeMove(move);
-      score = minimax(game, depth - 1, -Infinity, Infinity);
+      score = minimax(game, depth - 1, -Infinity, Infinity, withBonus);
       game.undoMove();
 
       if (score > bestScore) {
@@ -27,7 +27,7 @@ export function findBestMove(game, depth) {
   } else {
     for (const move of moves) {
       game.makeMove(move);
-      score = minimax(game, depth - 1, -Infinity, Infinity);
+      score = minimax(game, depth - 1, -Infinity, Infinity, withBonus);
       game.undoMove();
 
       if (score < bestScore) {
@@ -36,17 +36,17 @@ export function findBestMove(game, depth) {
       }
     }
   }
-  console.log(bestMove);
-  console.log(score);
+  // console.log(bestMove);
+  // console.log(score);
 
   return bestMove;
 }
 // const game = new Chess()
 // findBestMove(game, 3)
 
-export function minimax(game, depth, alpha, beta) {
+export function minimax(game, depth, alpha, beta, withBonus) {
   if (depth === 0) {
-    return evaluate(game);
+    return evaluate(game, withBonus);
   }
 
   const moves = game.getAllLegalMoves();
@@ -64,7 +64,7 @@ export function minimax(game, depth, alpha, beta) {
     let bestScore = -Infinity;
     for (const move of moves) {
       game.makeMove(move);
-      let score = minimax(game, depth - 1, alpha, beta);
+      let score = minimax(game, depth - 1, alpha, beta, withBonus);
       game.undoMove();
 
       bestScore = Math.max(bestScore, score);
@@ -82,7 +82,7 @@ export function minimax(game, depth, alpha, beta) {
     let bestScore = Infinity;
     for (const move of moves) {
       game.makeMove(move);
-      let score = minimax(game, depth - 1, alpha, beta);
+      let score = minimax(game, depth - 1, alpha, beta, withBonus);
       game.undoMove();
 
       bestScore = Math.min(bestScore, score);

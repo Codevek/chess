@@ -21,26 +21,31 @@ const PIECE_SQUARE_TABLES = {
   n: KNIGHT_TABLE,
   b: BISHOP_TABLE,
   q: QUEEN_TABLE,
-  k: KING_MIDDLE_TABLE
-}
+  k: KING_MIDDLE_TABLE,
+};
 
-export function evaluate(game) {
+export function evaluate(game, withBonus = true) {
   let score = 0;
   const board = game.getBoard();
 
-  for (let row=0; row<board.length; row++) {
-    for (let col=0; col<7; col++) {
+  for (let row = 0; row < board.length; row++) {
+    for (let col = 0; col < 7; col++) {
       if (board[row][col] === null) continue;
-      
-      const piece = board[row][col]
-      
-      // const table = PIECE_SQUARE_TABLES[piece.type]
 
-      // const tableRow = piece.color === "w" ? row: 7-row 
-      // const bonus = table[tableRow][col] 
+      const piece = board[row][col];
 
-      if (piece.color === "w") score += PIECE_VALUES[piece.type] 
-      else score -= PIECE_VALUES[piece.type]
+      const table = PIECE_SQUARE_TABLES[piece.type];
+
+      const tableRow = piece.color === "w" ? row : 7 - row;
+      const bonus = table[tableRow][col];
+
+      if (withBonus) {
+        if (piece.color === "w") score += PIECE_VALUES[piece.type] + bonus;
+        else score -= PIECE_VALUES[piece.type] + bonus;
+      } else {
+        if (piece.color === "w") score += PIECE_VALUES[piece.type]
+        else score -= PIECE_VALUES[piece.type]
+      }
     }
   }
   // console.log(score);

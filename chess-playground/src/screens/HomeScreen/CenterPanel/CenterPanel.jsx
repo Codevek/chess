@@ -5,7 +5,6 @@ import PracticePanel from "./PracticePanel";
 import SettingsPanel from "./SettingsPanel";
 import FriendPanel from "./FriendPanel";
 import { MENU_MODE } from "@/lib/menuModes";
-import { mod } from "three/src/nodes/math/OperatorNode.js";
 
 export default function CenterPanel({
   mode,

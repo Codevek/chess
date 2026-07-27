@@ -26,24 +26,24 @@ export default function BoardScreen({ session }) {
   // console.log(gameConfig);
 
   const {
+    mode, // "bot", "practice", "online", "friend"
     playerColor,
     botColor,
     depth,
     whiteTime,
     blackTime,
     increment,
-    flipped,
   } = session;
 
   // "2K5/2P2PnP/pB1k1b2/8/p3B2Q/1Ppqp3/8/8 w - - 0 1"
+  const [flipped, setFlipped] = useState(playerColor === "black");
   const [selectedSquare, setSelectedSquare] = useState(null);
   const [legalMoves, setLegalMoves] = useState([]);
-  const [_, forceUpdate] = useState(0);
+  // const [_, forceUpdate] = useState(0);
   const [lastMove, setLastMove] = useState(null);
   const [kingInCheck, setKingInCheck] = useState(null);
   const [gameResult, setGameResult] = useState(null);
   const [history, setHistory] = useState([]);
-  // const [flipped, setFlipped] = useState(playerColor === "black");
 
   // const [whiteTime, setWhiteTime] = useState(config.time);
   // const [blackTime, setBlackTime] = useState(config.time);
@@ -56,104 +56,115 @@ export default function BoardScreen({ session }) {
   };
 
   useEffect(() => {
-    if (botColor === "white") {
+    if (botColor === "white" && mode === "bot") {
       makeBotMove();
     }
-  }, []);
+  }, [mode, botColor]);
 
   function makeBotMove() {
-    const botMove = findBestMove(game, 2);
+    const botMove = findBestMove(game, session.depth, session.withBonus);
     const movingPiece = board[botMove.from[0]][botMove.from[1]];
     playMove(botMove, movingPiece);
+    console.log(session.depth, session.withBonus);
+  }
+
+  function playMove(move, movingPiece) {
+    game.makeMove(move);
+
+    //mate/stalemate Check
+    if (game.isCheckmate(game.getTurn())) {
+      setGameResult({
+        type: "checkmate",
+        winner: game.getTurn() === "w" ? "black" : "white",
+      });
+    } else if (game.isStalemate(game.getTurn())) {
+      setGameResult({
+        type: "stalemate",
+      });
+    }
+
+    //get move for History
+    const playedMove = {
+      piece: movingPiece.type,
+      color: movingPiece.color,
+      from: move.from,
+      to: move.to,
+      captured: move.captured ?? null,
+      check: game.isKingInCheck(game.getTurn()),
+      mate: game.isCheckmate(game.getTurn()),
+    };
+
+    //update Screen
+    setHistory((prevStateValue) => [...prevStateValue, playedMove]);
+    const inCheck = game.isKingInCheck(game.getTurn());
+    setKingInCheck(inCheck ? game.findKing(game.getTurn()) : null);
+    setLastMove({
+      from: move.from,
+      to: move.to,
+    });
+    setBoard([...game.getBoard()]);
+    clearSelection();
+    clearLegalMoves();
   }
 
   function handleSquareClick(row, col) {
     if (gameResult) return;
 
-    const board = game.getBoard();
-    const piece = board[row][col];
+    const currentBoard = game.getBoard();
+    const piece = currentBoard[row][col];
 
+    if (mode === "bot" && game.getTurn() === botColor[0]) return;
+    if (
+      (mode === "online" || mode === "friend") &&
+      game.getTurn !== playerColor[0]
+    )
+      return;
+
+    //selectPiece
     if (!selectedSquare && piece && piece.color === game.getTurn()) {
       setSelectedSquare([row, col]);
-      const moves = game.getLegalMoves(row, col);
-      // console.log(moves);
-      setLegalMoves(moves);
-
+      // const moves = game.getLegalMoves(row, col);
+      // // console.log(moves);
+      setLegalMoves(game.getLegalMoves(row, col));
       return;
     }
 
+    //if already selected
     if (selectedSquare) {
       const move = legalMoves.find((m) => m.to[0] === row && m.to[1] === col);
-      const movingPiece = board[selectedSquare[0]][selectedSquare[1]];
-      // console.log(move);
-
-      // if (!move) {
-      //   if (piece.color === game.getTurn()) {
-      //     continue
-      //   }
-      // }
+      const movingPiece = currentBoard[selectedSquare[0]][selectedSquare[1]];
 
       if (move) {
-        game.makeMove({
-          from: selectedSquare,
-          to: [row, col],
-        });
-
-        if (game.isCheckmate(game.getTurn())) {
-          setGameResult({
-            type: "checkmate",
-            winner: game.getTurn() === "w" ? "black" : "white",
-          });
-        } else if (game.isStalemate(game.getTurn())) {
-          setGameResult({
-            type: "stalemate",
-          });
-        }
-
+        playMove(
+          {
+            from: selectedSquare,
+            to: [row, col],
+            captured: move.captured,
+          },
+          movingPiece,
+        );
         console.log(generateFEN(game));
 
-        const playedMove = {
-          piece: movingPiece.type,
+        switch (mode) {
+          case "bot":
+            if (game.getTurn() === botColor[0]) {
+              setTimeout(() => makeBotMove(), 50);
+            }
+            break;
 
-          color: movingPiece.color,
+          case "practice":
+            setFlipped(p=> !p)
+            break;
 
-          from: selectedSquare,
+          case "online":
+          case "friend":
+            break;
 
-          to: [row, col],
-
-          captured: move.captured ?? null,
-
-          check: false,
-
-          mate: false,
-        };
-
-        setHistory((prevStateValue) => [...prevStateValue, playedMove]);
-        // console.log(history);
-
-        const inCheck = game.isKingInCheck(game.getTurn());
-
-        setKingInCheck(inCheck ? game.findKing(game.getTurn()) : null);
-
-        setLastMove({
-          from: selectedSquare,
-          to: [row, col],
-        });
-        // const [isKingInCheck, kingPos]= game.isKingInCheck(game.getTurn())
-        // setInCheck(isKingInCheck)
-        // console.log(lastMove);
-
-        clearSelection();
-        clearLegalMoves();
-
-        setBoard([...game.getBoard()]);
-
-        //botMove logic
-        if (game.getTurn() === botColor[0]) {
-          makeBotMove();
+          default:
+            break;
         }
       } else {
-        if (piece) {
+        if (piece && piece.color === game.getTurn()) {
           setSelectedSquare([row, col]);
           setLegalMoves(game.getLegalMoves(row, col));
         } else {
@@ -164,29 +175,9 @@ export default function BoardScreen({ session }) {
     }
   }
 
-  function playMove(move, movingPiece) {
-    game.makeMove(move);
-    setBoard([...game.getBoard()]);
-    const playedMove = {
-      piece: movingPiece.type,
-
-      color: movingPiece.color,
-
-      from: move.from,
-
-      to: move.to,
-
-      captured: move.captured ?? null,
-
-      check: false,
-
-      mate: false,
-    };
-    setHistory((prevStateValue) => [...prevStateValue, playedMove]);
-  }
-
   function handleNewGame() {
-    setGame(new Chess());
+    gameRef.current = new Chess();
+    setBoard([...gameRef.current.getBoard()]);
     clearSelection();
     clearLegalMoves();
     setLastMove(null);
@@ -226,13 +217,11 @@ export default function BoardScreen({ session }) {
 
   const capturedByWhite = getCapturedPieces(history, "w");
   const capturedByBlack = getCapturedPieces(history, "b");
-
   const scoreWhite = getScore(capturedByWhite);
   const scoreBlack = getScore(capturedByBlack);
 
   const relativeWhite =
     scoreWhite > scoreBlack ? "+" + (scoreWhite - scoreBlack) : null;
-
   const relativeBlack =
     scoreBlack > scoreWhite ? "+" + (scoreBlack - scoreWhite) : null;
 
@@ -287,8 +276,8 @@ export default function BoardScreen({ session }) {
         score: relativeWhite,
       };
 
-  console.log(topCaptured);
-  console.log(bottomCaptured);
+  // console.log(topCaptured);
+  // console.log(bottomCaptured);
 
   // const quitHandler = () => {
   //   return <HomeScreen />;
@@ -307,21 +296,17 @@ export default function BoardScreen({ session }) {
     >
       <div className="flex flex-col justify-between gap-20 items-center">
         <PlayerCard {...topPlayer} />
-        <LeftPanel
-          onNewGame={handleNewGame}
-          onFlipBoard={handleFlipBoard}
-          // onQuit={onQuit}
-        />
+        <LeftPanel onNewGame={handleNewGame} onFlipBoard={handleFlipBoard} />
         <PlayerCard {...bottomPlayer} />
       </div>
       <div className="flex flex-col items-center gap-10">
         <div className="relative">
           <Board
             board={board}
-            isSelected={isSelected}
-            isLegalMove={isLegalMove}
-            isLastMove={isLastMove}
-            isKingInCheck={isKingInCheck}
+            selectedSquare={selectedSquare}
+            legalMoves={legalMoves}
+            lastMove={lastMove}
+            kingInCheck={kingInCheck}
             onSquareClick={handleSquareClick}
             flipped={flipped}
           />
