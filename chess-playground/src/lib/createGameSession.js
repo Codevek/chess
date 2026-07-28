@@ -11,23 +11,14 @@ export default function createGameSesssion(config) {
 
   return {
     mode: config.mode,
-
     difficulty: config.difficulty,
-
     depth: BOT_DEPTH[config.difficulty],
-
     withBonus: config.difficulty === "hard"? false: true,
-
     playerColor,
-
     botColor,
-
     whiteTime: config.time,
-
     blackTime: config.time,
-
     increment: config.increment,
-
     flipped: playerColor === "black",
   };
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SpotlightCard from "@/components/ui/SpotlightCard/SpotlightCard";
 import ColorSlider from "@/components/ui/Slider/Slider";
 
@@ -49,6 +49,16 @@ export default function TimerControl({ gameConfig, setGameConfig }) {
     }, // Purple spotlight
   ];
 
+  useEffect(()=>{
+    if(selectedMode === "custom"){
+      setGameConfig((prev) => ({
+        ...prev,
+        time: minute * 60,
+        increment: increment,
+      }));
+    }
+  }, [minute, increment, selectedMode, setGameConfig])
+
   return (
     <div className="h-[60vh] w-[30vw] grid grid-cols-2 grid-rows-2 gap-5">
       {timeControls.map((mode) => (
@@ -57,15 +67,19 @@ export default function TimerControl({ gameConfig, setGameConfig }) {
           isSelected={selectedMode === mode.id}
           spotlightColor={mode.color}
           onClick={() => {
-            setSelectedMode(mode.id)
-            setMinute(mode.minute)
-            setIncrement(mode.increment)
-            setGameConfig(prev=>({
-              ...prev,
-              time: mode.minute*60,
-              increment: mode.increment*60
-            }));
-            // console.log(gameConfig)
+            setSelectedMode(mode.id);
+            
+            // Only overwrite if it's NOT the custom button
+            if (mode.id !== "custom") {
+              setMinute(mode.minute !== null ? mode.minute : 30);
+              setIncrement(mode.increment !== null ? mode.increment : 0);
+              
+              setGameConfig((prev) => ({
+                ...prev,
+                time: mode.minute !== null ? mode.minute * 60 : null,
+                increment: mode.increment,
+              }));
+            }
           }}
           className={`flex flex-col items-center justify-center text-center ${mode.class}`}
         >
@@ -85,6 +99,8 @@ export default function TimerControl({ gameConfig, setGameConfig }) {
             setvalue={setMinute}
             min={1}
             max={60}
+            setMinute={setMinute}
+            setGameConfig={setGameConfig}
           />
         )}
       </div>

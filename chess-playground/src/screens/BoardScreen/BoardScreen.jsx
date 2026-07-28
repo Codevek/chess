@@ -26,12 +26,13 @@ export default function BoardScreen({ session }) {
   // console.log(gameConfig);
 
   const {
-    mode, // "bot", "practice", "online", "friend"
+    mode, // "newgame", "practice", "online", "friend"
     playerColor,
     botColor,
     depth,
-    whiteTime,
-    blackTime,
+    time,
+    whiteTime = time || 600,
+    blackTime = time || 600,
     increment,
   } = session;
 
@@ -45,8 +46,9 @@ export default function BoardScreen({ session }) {
   const [gameResult, setGameResult] = useState(null);
   const [history, setHistory] = useState([]);
 
-  // const [whiteTime, setWhiteTime] = useState(config.time);
-  // const [blackTime, setBlackTime] = useState(config.time);
+  const [whiteClock, setWhiteClock] = useState(whiteTime);
+  const [blackClock, setBlackClock] = useState(blackTime);
+  const [running, setRunning] = useState(true);
 
   const clearSelection = () => {
     setSelectedSquare(null);
@@ -56,20 +58,81 @@ export default function BoardScreen({ session }) {
   };
 
   useEffect(() => {
-    if (botColor === "white" && mode === "bot") {
+    if (botColor === "white" && mode === "newgame") {
       makeBotMove();
     }
   }, [mode, botColor]);
 
+  useEffect(() => {
+    if (!running) return;
+    const interval = setInterval(() => {
+      if (game.getTurn() === "w") {
+        setWhiteClock((time) => Math.max(0, time - 1));
+      } else {
+        setBlackClock((time) => Math.max(0, time - 1));
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [running, gameResult]);
+
+  useEffect(() => {
+    if (whiteClock === 0) {
+      setGameResult({
+        type: "timeout",
+        winner: "black",
+      });
+
+      setRunning(false);
+    }
+
+    if (blackClock === 0) {
+      setGameResult({
+        type: "timeout",
+        winner: "white",
+      });
+
+      setRunning(false);
+    }
+  }, [whiteClock, blackClock]);
+
   function makeBotMove() {
-    const botMove = findBestMove(game, session.depth, session.withBonus);
-    const movingPiece = board[botMove.from[0]][botMove.from[1]];
-    playMove(botMove, movingPiece);
+    if (game.getTurn() !== botColor[0]) {
+      console.warn(
+        "Blocked bot from playing on human's turn. (Safe to ignore in Dev)",
+      );
+      return;
+    }
+    
+    //createWorker for background findBestMove(since it take a lot timr) nd in these time the rest of the ui's components should be working perfectly
+    const worker = new Worker(new URL("../../lib/botWorker.js", import.meta.url), {type: "module"})
+    worker.onmessage = (e)=>{
+      const botMove = e.data;
+      if (botMove) {
+        const movingPiece = board[botMove.from[0]][botMove.from[1]];
+        playMove(botMove, movingPiece);
+      }
+      worker.terminate(); // Clean up the thread after the move is done
+    }
+    worker.postMessage({
+      fen: generateFEN(game),
+      depth: depth || 2,
+      withBonus: session.withBonus
+    });
+
+    // const botMove = findBestMove(game, depth, session.withBonus);
+    // const movingPiece = board[botMove.from[0]][botMove.from[1]];
+    // playMove(botMove, movingPiece);
     console.log(session.depth, session.withBonus);
   }
 
   function playMove(move, movingPiece) {
     game.makeMove(move);
+
+    if (movingPiece.color === "w") {
+      setWhiteClock((t) => t + increment);
+    } else {
+      setBlackClock((t) => t + increment);
+    }
 
     //mate/stalemate Check
     if (game.isCheckmate(game.getTurn())) {
@@ -113,7 +176,7 @@ export default function BoardScreen({ session }) {
     const currentBoard = game.getBoard();
     const piece = currentBoard[row][col];
 
-    if (mode === "bot" && game.getTurn() === botColor[0]) return;
+    if (mode === "newgame" && game.getTurn() === botColor[0]) return;
     if (
       (mode === "online" || mode === "friend") &&
       game.getTurn !== playerColor[0]
@@ -146,14 +209,14 @@ export default function BoardScreen({ session }) {
         console.log(generateFEN(game));
 
         switch (mode) {
-          case "bot":
+          case "newgame":
             if (game.getTurn() === botColor[0]) {
               setTimeout(() => makeBotMove(), 50);
             }
             break;
 
           case "practice":
-            setFlipped(p=> !p)
+            setFlipped((p) => !p);
             break;
 
           case "online":
@@ -185,6 +248,10 @@ export default function BoardScreen({ session }) {
     setGameResult(null);
     setHistory([]);
     console.log(game);
+
+    if (mode === "newgame" && botColor === "white") {
+      makeBotMove();
+    }
 
     // console.log("newgame");
 
@@ -231,14 +298,14 @@ export default function BoardScreen({ session }) {
         name: "Vivek Sharma",
         country: "IND",
         rating: 5000,
-        time: 771,
+        time: whiteClock,
       }
     : {
         avatar: avatar1,
         name: "Magnus Carlsen",
         country: "NOR",
         rating: 2830,
-        time: 671,
+        time: blackClock,
       };
 
   const bottomPlayer = flipped
@@ -247,14 +314,14 @@ export default function BoardScreen({ session }) {
         name: "Magnus Carlsen",
         country: "NOR",
         rating: 2830,
-        time: 671,
+        time: blackClock,
       }
     : {
         avatar: avatar2,
         name: "Vivek Sharma",
         country: "IND",
         rating: 5000,
-        time: 771,
+        time: whiteClock,
       };
 
   const topCaptured = flipped

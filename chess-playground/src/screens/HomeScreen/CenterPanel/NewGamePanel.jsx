@@ -2,7 +2,7 @@ import Button from "../components/Button";
 import Bot from "../components/BotDifficultySelector";
 import { useState } from "react";
 import BoardScreen from "@/screens/BoardScreen/BoardScreen";
-import TimeControl from "../components/TimeControl";
+import TimeControl from "../components/TimerControl";
 import ColorSelector from "../components/ColorSelector";
 import BotDifficultySelector from "../components/BotDifficultySelector";
 
