@@ -1,9 +1,9 @@
 export function getHealthStatus() {
 
-    throw new Error("Testing")
+    // throw new Error("Testing")
   return {
     success: true,
-    message: "yep its working",
+    message: "mf",
     uptime: process.uptime(),
   };
 }
