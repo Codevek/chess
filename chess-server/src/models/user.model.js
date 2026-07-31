@@ -56,4 +56,6 @@ const userSchema = new mongoose.Schema({
   lastSeen: {
     type: Date,
   },
-});
+}, {timestamps: true});
+
+export const user = mongoose.model("user", userSchema)
