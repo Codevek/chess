@@ -1,5 +1,5 @@
-export function authService(){
-    return({
-        auth: "working"
-    })
+import bcrypt from "bcrypt"
+
+export async function register(userData) {
+    
 }

@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import mongoose, {Schema} from "mongoose";
 
-const userSchema = new mongoose.Schema({
-  name: {
+const userSchema = new Schema({
+  fullName: {
     type: String,
     required: true,
     minlength: 4,
@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     trim: true,
+    index: true,
     minlength: 3,
     maxlength: 20,
   },
@@ -25,11 +26,11 @@ const userSchema = new mongoose.Schema({
 
   password: {
     type: String,
-    required: true,
+    required: [true, "password is required"],
   },
 
   avatar: {
-    type: String,
+    type: String, //cloudinary url
     default: "/avatars/default.png",
   },
 
