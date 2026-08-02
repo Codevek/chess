@@ -1,6 +1,8 @@
-// import { register } from "../services/auth.service.js";
+import { registerService } from "../services/auth.service.js"
+import ApiResponse from "../utils/apiResponse.js"
+import { asyncHandler } from "../utils/asyncHandler.js"
 
-// export function register(req, res){
-//     const register = authService()
-//     res.status(200).json(register)
-// }
+export const registerUser = asyncHandler(async(req, res)=> {
+    const user =  await (registerService(req.body))
+    res.status(201).json(new ApiResponse(201, user, "userCreated"))
+})

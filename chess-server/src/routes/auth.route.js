@@ -1,8 +1,8 @@
-// import { Router } from "express";
-// import { register } from "../controllers/auth.controller.js";
+import { Router } from "express";
+import { registerUser } from "../controllers/auth.controller.js";
 
-// const authRoute = Router();
+const authRoute = Router();
 
-// authRoute.post("/register", register);
+authRoute.post("/register", registerUser);
 
-// export default authRoute;
+export default authRoute;
