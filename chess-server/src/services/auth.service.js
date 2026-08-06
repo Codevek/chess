@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
-import { user } from "../models/user.model.js";
+import { User } from "../models/user.model.js";
 import ApiError from "../utils/apiError.js";
+import { accessAndRefreshTokenGenerator } from "../utils/tokenGenerator.js";
 
 export async function registerService(userData) {
   //getUserDetails
@@ -27,7 +28,7 @@ export async function registerService(userData) {
   //   console.log(use)
 
   //checkIfUserAlreadyExists: username,email
-  const existedUser = await user.findOne({ $or: [{ username }, { email }] }); //bdhiya cheez hai yaar ye, dono check ho gya ek hi saath
+  const existedUser = await User.findOne({ $or: [{ username }, { email }] }); //bdhiya cheez hai yaar ye, dono check ho gya ek hi saath
   if (existedUser) {
     throw new ApiError(400, `User already exists`);
   }
@@ -40,7 +41,7 @@ export async function registerService(userData) {
   //imageDataCheck&Upload- cloudinary
 
   //createUserObject- EntryInDB
-  const createdUser = await user.create({
+  const createdUser = await User.create({
     username,
     email,
     password,
@@ -55,7 +56,7 @@ export async function registerService(userData) {
   await createdUser.save({ validateBeforeSave: false });
 
   //removePassword&RefreshTokens
-  const safeUser = await user
+  const safeUser = await User
     .findById(createdUser._id)
     .select("-password -refreshToken");
 
@@ -79,7 +80,7 @@ export async function loginService(loginData) {
   }
 
   //findUser
-  const requiredUser = await user.findOne({ $or: [{ username }, { email }] });
+  const requiredUser = await User.findOne({ $or: [{ username }, { email }] });
   if (!requiredUser) {
     throw new ApiError(404, "User not Found");
   }
@@ -94,19 +95,19 @@ export async function loginService(loginData) {
   }
 
   //generate&SaveTokens
-  const accessToken = requiredUser.generateAccessToken();
-  const refreshToken = requiredUser.generateRefreshToken();
-
-  requiredUser.refreshToken = refreshToken;
-  await requiredUser.save({ validateBeforeSave: false });
+  const {accessToken, refreshToken} = await accessAndRefreshTokenGenerator(requiredUser._id)
 
   //safeUserInfo
-  const safeUser = await user
+  const safeUserInfo = await User
     .findById(requiredUser._id)
     .select("-password -refreshToken");
   return {
-    user: safeUser,
+    user: safeUserInfo,
     accessToken,
     refreshToken,
   };
+}
+
+export async function logoutService() {
+  
 }
