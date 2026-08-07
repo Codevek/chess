@@ -2,7 +2,7 @@ import GooeySelector from "@/components/ui/GooeySelector/GooeySelector";
 import black from "@/assets/pieces/qB.svg"
 import white from "@/assets/pieces/qW.svg"
 
-export default function ColorSelector({gameConfig, setGameConfig}) {
+export default function ColorSelector({gameConfig, setGameConfig, defaultOption}) {
   const chessItems = [
     {
       id: 'black',
@@ -46,7 +46,7 @@ export default function ColorSelector({gameConfig, setGameConfig}) {
     <div className="max-w-[320px] mx-auto p-4">
       <GooeySelector 
         items={chessItems} 
-        initialActiveIndex={3} 
+        initialActiveIndex={gameConfig.color ?? defaultOption}
         onSelect={(item) => {
           console.log('Selected:', item.id)
           setGameConfig(prev=>({

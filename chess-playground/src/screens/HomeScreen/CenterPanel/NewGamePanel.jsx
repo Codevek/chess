@@ -17,7 +17,11 @@ export default function NewGamePanel({ onStart, gameConfig, setGameConfig, mode 
         </div>
       </div>
       <div className="w-[30%]">
-        <ColorSelector gameConfig={gameConfig} setGameConfig={setGameConfig}/>
+        <ColorSelector
+          gameConfig={gameConfig}
+          setGameConfig={setGameConfig}
+          defaultOption="random"
+        />
       </div>
     </div>
   );

@@ -1,4 +1,21 @@
-import { useRef, useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+
+const resolveActiveIndex = (items, initialActiveIndex) => {
+  if (!items?.length) return 0;
+
+  if (typeof initialActiveIndex === 'string') {
+    const matchedIndex = items.findIndex(item => item.id === initialActiveIndex);
+    if (matchedIndex !== -1) return matchedIndex;
+  }
+
+  if (initialActiveIndex === null || initialActiveIndex === undefined) {
+    return 0;
+  }
+
+  const index = Number(initialActiveIndex);
+  if (Number.isNaN(index)) return 0;
+  return Math.max(0, Math.min(index, items.length - 1));
+};
 
 const GooeySelector = ({
   items,
@@ -8,13 +25,16 @@ const GooeySelector = ({
   particleDistances = [90, 15],
   particleR = 100,
   timeVariance = 1000,
-  initialActiveIndex = 3 // Default to Random
+  initialActiveIndex = 'random',
+  // setActiveColor = "random"
 }) => {
   const containerRef = useRef(null);
   const navRef = useRef(null);
   const filterRef = useRef(null);
   const textRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(initialActiveIndex);
+  const isFirstRender = useRef(true);
+
+  const [activeIndex, setActiveIndex] = useState(() => resolveActiveIndex(items, initialActiveIndex));
 
   const noise = (n = 1) => n / 2 - Math.random() * n;
   
@@ -22,8 +42,20 @@ const GooeySelector = ({
     const angle = ((360 + noise(8)) / totalPoints) * pointIndex * (Math.PI / 180);
     return [distance * Math.cos(angle), distance * Math.sin(angle)];
   };
+
+  const applyItemStyles = item => {
+    if (!item) return;
+    if (filterRef.current) {
+      filterRef.current.style.setProperty('--pill-color', item.pillColor || 'white');
+    }
+    if (textRef.current) {
+      textRef.current.style.setProperty('--active-text-color', item.activeTextColor || 'black');
+    }
+    if (containerRef.current) {
+      containerRef.current.style.setProperty('--active-text-color', item.activeTextColor || 'black');
+    }
+  };
   
-  // Accepts a custom list of colors for the particles
   const createParticle = (i, t, d, r, particleColors) => {
     let rotate = noise(r / 10);
     const color = particleColors[Math.floor(Math.random() * particleColors.length)];
@@ -58,7 +90,6 @@ const GooeySelector = ({
         particle.style.setProperty('--end-y', `${p.end[1]}px`);
         particle.style.setProperty('--time', `${p.time}ms`);
         particle.style.setProperty('--scale', `${p.scale}`);
-        // Apply the exact hex/rgb string
         particle.style.setProperty('--color', p.color);
         particle.style.setProperty('--rotate', `${p.rotate}deg`);
         
@@ -93,21 +124,7 @@ const GooeySelector = ({
     };
     Object.assign(filterRef.current.style, styles);
     Object.assign(textRef.current.style, styles);
-    
-    // Copy HTML to the floating text layer
     textRef.current.innerHTML = element.innerHTML;
-  };
-
-  const setItemColors = (item) => {
-    if (filterRef.current) {
-      filterRef.current.style.setProperty('--pill-color', item.pillColor || 'white');
-    }
-    if (textRef.current) {
-      textRef.current.style.setProperty('--active-text-color', item.activeTextColor || 'black');
-    }
-    if (containerRef.current) {
-      containerRef.current.style.setProperty('--active-text-color', item.activeTextColor || 'black');
-    }
   };
 
   const handleClick = (e, index, item) => {
@@ -115,7 +132,7 @@ const GooeySelector = ({
     if (activeIndex === index) return;
     
     setActiveIndex(index);
-    setItemColors(item);
+    applyItemStyles(item);
 
     if (onSelect) onSelect(item);
     
@@ -131,23 +148,36 @@ const GooeySelector = ({
       textRef.current.classList.add('active');
     }
     if (filterRef.current) {
-      // Pass the item's specific particle colors or fall back to the pill color
       makeParticles(filterRef.current, item.particleColors || [item.pillColor || 'white']);
     }
   };
 
   useEffect(() => {
-    if (!navRef.current || !containerRef.current) return;
+    setActiveIndex(resolveActiveIndex(items, initialActiveIndex));
+  }, [initialActiveIndex, items]);
+
+  useEffect(() => {
+    if (!navRef.current || !containerRef.current || !items?.length) return;
     
+    if (activeIndex >= items.length) {
+      setActiveIndex(resolveActiveIndex(items, initialActiveIndex));
+      return;
+    }
+
     const activeItem = items[activeIndex];
     const activeLi = navRef.current.querySelectorAll('li')[activeIndex];
     
     if (activeLi && activeItem) {
-      setItemColors(activeItem);
+      applyItemStyles(activeItem);
       updateEffectPosition(activeLi);
+      filterRef.current?.classList.add('active');
       textRef.current?.classList.add('active');
+
+      if (isFirstRender.current && onSelect) {
+        onSelect(activeItem);
+      }
     }
-    
+
     const resizeObserver = new ResizeObserver(() => {
       const currentActiveLi = navRef.current?.querySelectorAll('li')[activeIndex];
       if (currentActiveLi) {
@@ -155,8 +185,9 @@ const GooeySelector = ({
       }
     });
     resizeObserver.observe(containerRef.current);
+    isFirstRender.current = false;
     return () => resizeObserver.disconnect();
-  }, [activeIndex, items]);
+  }, [activeIndex, initialActiveIndex, items]);
 
   return (
     <>
