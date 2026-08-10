@@ -21,7 +21,7 @@ export async function registerService(userData) {
   //validationOfUserData
   const requiredFields = [fullName, username, email, password];
   requiredFields.map((field) => {
-    if (field.trim() === "") {
+    if (field?.trim() === "") {
       throw new ApiError(400, `All fields are required, ${field} missing !!`);
     }
   });
@@ -108,6 +108,14 @@ export async function loginService(loginData) {
   };
 }
 
-export async function logoutService() {
-  
+export async function logoutService(userId) {
+  await User.findByIdAndUpdate(userId, {
+    $set: {refreshToken: undefined}
+  }, {new: true})
+}
+
+export async function getCurrentUserService(userId) {
+  const currentUser = await User.findById(userId).select("-password -refreshToken")
+
+  return currentUser
 }
