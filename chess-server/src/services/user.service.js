@@ -1,5 +1,22 @@
-import { User } from "../models/user.model";
+import { User } from "../models/user.model.js";
 
-export function searchUsersService(query) {
-  User.findOne({$or: [{username}, {fullName}]})
+export async function searchUsersService(query, currentUserId) {
+  const find = await User.find({
+    $or: [
+      {
+        username: {
+          $regex: query,
+          $options: "i",
+        },
+      },
+      {
+        fullName: {
+          $regex: query,
+          $options: "i",
+        },
+      },
+    ],
+    _id: { $ne: currentUserId },
+  });
+  console.log(find);
 }
