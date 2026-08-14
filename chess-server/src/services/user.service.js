@@ -17,6 +17,6 @@ export async function searchUsersService(query, currentUserId) {
       },
     ],
     _id: { $ne: currentUserId },
-  });
+  }).select("-refreshToken -password").limit(10)
   console.log(find);
 }

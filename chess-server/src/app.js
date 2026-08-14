@@ -5,6 +5,7 @@ import morgan from "morgan";
 import authRoute from "./routes/auth.route.js";
 import { errorMiddleware } from "./middleware/error.middleware.js";
 import userRoute from "./routes/users.route.js";
+import friendRoute from "./routes/friend.route.js";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(morgan("dev"));
 
 app.use("/users", userRoute)
 app.use("/auth", authRoute)
+app.use("/friends", friendRoute)
 
 app.use(errorMiddleware)
 

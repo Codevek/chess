@@ -49,5 +49,7 @@ export const getCurrentUser = asyncHandler(async (req, res) => {
   const currentUser = await getCurrentUserService(req.user._id);
   res
     .status(200)
-    .json(new ApiResponse(200, currentUser, "Current user fetched successfully."));
+    .json(
+      new ApiResponse(200, currentUser, "Current user fetched successfully."),
+    );
 });
