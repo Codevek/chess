@@ -16,10 +16,10 @@
 // }
 // check();
 
-async function getData() {
-    const response = await fetch("https://api.freeapi.app/api/v1/public/randomjokes/joke/random");
-    const json = await response.json();
-    console.log(json.data);          
-    console.log(json.data.content);  
-}
-getData();
+// async function getData() {
+//     const response = await fetch("https://api.freeapi.app/api/v1/public/randomjokes/joke/random");
+//     const json = await response.json();
+//     console.log(json.data);          
+//     console.log(json.data.content);  
+// }
+// getData();
