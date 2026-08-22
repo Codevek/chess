@@ -16,8 +16,9 @@ import HomeScreen from "../HomeScreen/HomeScreen";
 import newGame from "../../../../chess-engine/src/index.js";
 import { BOT_DEPTH } from "@/lib/botLevel";
 import { findBestMove } from "chess-engine/src/ai/minimax";
+import QuitPopup from "@/components/QuitPopup";
 
-export default function BoardScreen({ session }) {
+export default function BoardScreen({ session, onQuitGame }) {
   const gameRef = useRef(new Chess());
   const game = gameRef.current;
 
@@ -140,10 +141,12 @@ export default function BoardScreen({ session }) {
         type: "checkmate",
         winner: game.getTurn() === "w" ? "black" : "white",
       });
+      setRunning(false)
     } else if (game.isStalemate(game.getTurn())) {
       setGameResult({
         type: "stalemate",
       });
+      setRunning(false)
     }
 
     //get move for History
@@ -243,11 +246,14 @@ export default function BoardScreen({ session }) {
     setBoard([...gameRef.current.getBoard()]);
     clearSelection();
     clearLegalMoves();
+    setWhiteClock(whiteTime)
+    setBlackClock(blackTime)
     setLastMove(null);
     setKingInCheck(null);
     setGameResult(null);
     setHistory([]);
-    console.log(game);
+    setRunning(true)
+    // console.log(game);
 
     if (mode === "newgame" && botColor === "white") {
       makeBotMove();
@@ -257,6 +263,13 @@ export default function BoardScreen({ session }) {
 
     // forceUpdate(value=> value+1)
   }
+
+  // function handleQuitGame(){
+  //   return(
+  //     HomeScreen
+  //   )
+    
+  // }
 
   const VALUES = {
     p: 1,
@@ -280,6 +293,14 @@ export default function BoardScreen({ session }) {
 
   function handleFlipBoard() {
     setFlipped((p) => !p);
+  }
+
+  function quitPopup(){
+    console.log("hell");
+    
+    return(
+      <QuitPopup result={onQuitGame}/>
+    )
   }
 
   const capturedByWhite = getCapturedPieces(history, "w");
@@ -363,7 +384,7 @@ export default function BoardScreen({ session }) {
     >
       <div className="flex flex-col justify-between gap-20 items-center">
         <PlayerCard {...topPlayer} />
-        <LeftPanel onNewGame={handleNewGame} onFlipBoard={handleFlipBoard} />
+        <LeftPanel onNewGame={handleNewGame} onFlipBoard={handleFlipBoard} onQuitGame={quitPopup}/>
         <PlayerCard {...bottomPlayer} />
       </div>
       <div className="flex flex-col items-center gap-10">

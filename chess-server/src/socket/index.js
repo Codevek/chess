@@ -8,12 +8,15 @@ export function initSocket(server) {
     },
   });
   io.on("connection", (socket) => {
-    console.log("io on happened");
-    console.log(socket.id);
+    console.log("Connected:", socket.id);
+
+    socket.on("hello", (name) => {
+      console.log("Client says:", name);
+    });
+
     socket.on("disconnect", () => {
-      console.log("disconnect happened");
+      console.log("Disconnected");
     });
   });
-
   return io;
 }
