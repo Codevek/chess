@@ -295,13 +295,13 @@ export default function BoardScreen({ session, onQuitGame }) {
     setFlipped((p) => !p);
   }
 
-  function quitPopup(){
-    console.log("hell");
+  // function quitPopup(){
+  //   console.log("hell");
     
-    return(
-      <QuitPopup result={onQuitGame}/>
-    )
-  }
+  //   return(
+  //     <QuitPopup result={onQuitGame}/>
+  //   )
+  // }
 
   const capturedByWhite = getCapturedPieces(history, "w");
   const capturedByBlack = getCapturedPieces(history, "b");
@@ -384,7 +384,7 @@ export default function BoardScreen({ session, onQuitGame }) {
     >
       <div className="flex flex-col justify-between gap-20 items-center">
         <PlayerCard {...topPlayer} />
-        <LeftPanel onNewGame={handleNewGame} onFlipBoard={handleFlipBoard} onQuitGame={quitPopup}/>
+        <LeftPanel onNewGame={handleNewGame} onFlipBoard={handleFlipBoard} onQuitGame={onQuitGame}/>
         <PlayerCard {...bottomPlayer} />
       </div>
       <div className="flex flex-col items-center gap-10">
