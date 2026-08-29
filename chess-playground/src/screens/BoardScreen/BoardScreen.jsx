@@ -21,6 +21,7 @@ import QuitPopup from "@/components/QuitPopup";
 export default function BoardScreen({ session, onQuitGame }) {
   const gameRef = useRef(new Chess());
   const game = gameRef.current;
+  const historyEndRef = useRef(null)
 
   const [board, setBoard] = useState(gameRef.current.board);
 
