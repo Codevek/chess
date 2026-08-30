@@ -3,6 +3,64 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 
+.input {
+  font-family: "Montserrat", sans-serif;
+  width: 100%;
+  min-height: 45px;
+  height: fit-content;
+  padding-left: 1.5rem;
+  box-shadow:
+    0 0 0 1.5px #2b2c37,
+    0 0 25px -17px #000;
+  border: 0;
+  border-radius: 12px;
+  background-color: #16171d;
+  outline: none;
+  color: #bdbecb;
+  transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1);
+  cursor: text;
+  z-index: 0;
+}
+
+.input::placeholder {
+  color: #bdbecb;
+}
+
+.input:hover {
+  box-shadow:
+    0 0 0 2.5px #2f303d,
+    0px 0px 25px -15px #000;
+}
+
+.input:active {
+  transform: scale(0.95);
+}
+
+.input:focus {
+  box-shadow: 0 0 0 2.5px #2f303d;
+}
+
+.counter {
+  margin-top: 10px;
+  user-select: none;
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #c084fc;
+  background: rgba(192, 132, 252, 0.15);
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+  margin-bottom: 10px;
+
+  &:hover {
+    border-color: rgba(192, 132, 252, 0.5);
+  }
+  &:focus-visible {
+    outline: 2px solid #c084fc;
+    outline-offset: 2px;
+  }
+}
+
 @custom-variant dark (&:is(.dark *));
 
 .history::-webkit-scrollbar{

@@ -6,12 +6,13 @@ import { MENU_MODE } from "./lib/menuModes";
 import { DEFAULT_GAME_CONFIG } from "@/lib/gameConfig";
 import createGameSesssion from "./lib/createGameSession";
 import socket from "./lib/socket.js";
+import LoginScreen from "./screens/AuthScreen/LoginScreen";
 
 export default function App() {
   const [mode, setMode] = useState(MENU_MODE.HOME);
   // const [startGame, setStartGame] = useState(false);
   const [gameConfig, setGameConfig] = useState(DEFAULT_GAME_CONFIG);
-  const [screen, setScreen] = useState("homeScreen");
+  const [screen, setScreen] = useState("loginScreen");
   const [gameSession, setGameSession] = useState(null);
 
   // const socket = io(...) //this thing aint working idk 
@@ -44,5 +45,7 @@ export default function App() {
     );
   } else if (screen === "boardScreen") {
     return <BoardScreen session={gameSession} onQuitGame = {handleQuitGame} />;
+  } else if(screen === "loginScreen"){
+    return <LoginScreen/>
   }
 }
