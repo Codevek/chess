@@ -14,23 +14,21 @@ export function initSocket(server) {
   io.use(socketAuth);
 
   io.on("connection", async (socket) => {
-    console.log("Connected:", socket.id);
+    console.log("Connected:", socket.id, Date.now());
     const currentSocketId = socket.id;
     const userId = await socket.user._id.toString();
-
-    console.log(userId);
 
     if (!onlineUsers.has(userId)) {
       onlineUsers.set(userId, []);
     }
-
     onlineUsers.get(userId).push(currentSocketId);
-
     console.table(onlineUsers);
 
-    // socket.on("hello", (name) => {
-    //   console.log("Client says:", name);
-    // });
+    socket.on("inviteFriend", async (friendId) => {
+      if(onlineUsers.has(friendId)){
+        
+      }
+    })
 
     socket.on("disconnect", (reaason) => {
       const sockets = onlineUsers.get(userId);
