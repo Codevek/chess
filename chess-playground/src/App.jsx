@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import BoardScreen from "./screens/BoardScreen/BoardScreen";
-import Button from "./screens/HomeScreen/components/Button";
 import HomeScreen from "./screens/HomeScreen/HomeScreen";
 import { MENU_MODE } from "./lib/menuModes";
 import { DEFAULT_GAME_CONFIG } from "@/lib/gameConfig";
@@ -15,12 +14,16 @@ export default function App() {
   const [screen, setScreen] = useState("loginScreen");
   const [gameSession, setGameSession] = useState(null);
 
-  // const socket = io(...) //this thing aint working idk 
-
   useEffect(() => {
-    socket.connect();
-    socket.emit("hello", "Vivek");
-    return () => socket.disconnect();
+    const disconnectSocket = () => socket.disconnect();
+
+    // Socket.IO also detects a closed transport, while this makes a normal
+    // browser tab close proactively send the disconnect.
+    window.addEventListener("pagehide", disconnectSocket);
+    return () => {
+      window.removeEventListener("pagehide", disconnectSocket);
+      disconnectSocket();
+    };
   }, []);
 
   function handleStart(config) {
@@ -46,6 +49,6 @@ export default function App() {
   } else if (screen === "boardScreen") {
     return <BoardScreen session={gameSession} onQuitGame = {handleQuitGame} />;
   } else if(screen === "loginScreen"){
-    return <LoginScreen/>
+    return <LoginScreen onLogin={() => setScreen("homeScreen")} />
   }
 }

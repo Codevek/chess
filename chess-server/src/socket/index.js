@@ -2,6 +2,16 @@ import { Server } from "socket.io";
 import { socketAuth } from "./socketAuth.js";
 import { onlineUsers } from "./onlineUsers.js";
 
+function logOnlineUsers() {
+  const rows = [...onlineUsers.entries()].map(([userId, socketIds]) => ({
+    userId,
+    socketCount: socketIds.length,
+    socketIds: socketIds.join(", "),
+  }));
+
+  console.table(rows);
+}
+
 //server only for real time requests
 export function initSocket(server) {
   const io = new Server(server, {
@@ -13,31 +23,34 @@ export function initSocket(server) {
 
   io.use(socketAuth);
 
-  io.on("connection", async (socket) => {
-    console.log("Connected:", socket.id, Date.now());
+  io.on("connection", (socket) => {
+    console.log("Connected:", socket.id);
     const currentSocketId = socket.id;
-    const userId = await socket.user._id.toString();
+    const userId = socket.user._id.toString();
 
     if (!onlineUsers.has(userId)) {
       onlineUsers.set(userId, []);
     }
     onlineUsers.get(userId).push(currentSocketId);
-    console.table(onlineUsers);
+    logOnlineUsers();
 
     socket.on("inviteFriend", async (friendId) => {
-      if(onlineUsers.has(friendId)){
-        
-      }
-    })
+      console.log("sent to: ", friendId);
+      console.log("sent by: ", socket.user.username);
+      
+      
+    });
 
-    socket.on("disconnect", (reaason) => {
-      const sockets = onlineUsers.get(userId);
+    socket.on("disconnect", (reason) => {
+      const sockets = onlineUsers.get(userId) ?? [];
       const filtered = sockets.filter((id) => id !== currentSocketId);
 
       if (filtered.length === 0) onlineUsers.delete(userId);
       else onlineUsers.set(userId, filtered);
-      console.log("Disconnected", currentSocketId, "reason: ", reaason);
+      console.log("Disconnected", currentSocketId, "reason: ", reason);
+      logOnlineUsers();
     });
   });
+
   return io;
 }
