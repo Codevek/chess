@@ -38,7 +38,6 @@ export function initSocket(server) {
       console.log("sent to: ", friendId);
       console.log("sent by: ", socket.user.username);
       
-      
     });
 
     socket.on("disconnect", (reason) => {

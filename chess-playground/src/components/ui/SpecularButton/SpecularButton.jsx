@@ -72,7 +72,7 @@ void main() {
 `;
 
 const SpecularButton = ({
-  children = 'Get Started',
+  children,
   size = 'lg',
   radius = 18,
   tint = '#ffffff',

@@ -44,6 +44,7 @@ export default function App() {
         gameConfig={gameConfig}
         setGameConfig={setGameConfig}
         onStart={handleStart}
+        onLogout={()=> setScreen("loginScreen")}
       />
     );
   } else if (screen === "boardScreen") {

@@ -7,6 +7,8 @@ import CenterPanel from "./CenterPanel/CenterPanel";
 import avatar3 from "../../assets/avtars/avatar1.jpg";
 import Button from "./components/Button";
 import BoardScreen from "../BoardScreen/BoardScreen";
+import socket from "@/lib/socket";
+import ConfirmationDialog from "@/components/ConfirmationDialog";
 
 export default function HomeScreen({
   mode,
@@ -14,38 +16,69 @@ export default function HomeScreen({
   gameConfig,
   setGameConfig,
   onStart,
+  onLogout,
 }) {
-  console.log(gameConfig);
+  function disconnectSocket() {
+    if (socket.disconnected) return Promise.resolve();
+    socket.disconnect();
+  }
+
+  async function handleLogout(onLogout) {
+    try {
+      let res = await fetch("http://localhost:5000/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      console.log("hey");
+
+      await disconnectSocket();
+      onLogout();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
-    <main className="min-h-screen bg-[#1b1b20] flex justify-evenly">
-      <div className="flex flex-col justify-evenly items-center">
-        <div className="w-[70vw] h-[30vh] rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl p-6">
-          <TopMenu
-            mode={mode}
-            setMode={setMode}
-            gameConfig={gameConfig}
-            setGameConfig={setGameConfig}
-          />
+    <>
+      {/* <ConfirmationDialog active={true}/> */}
+      <main className="min-h-screen bg-[#1b1b20] flex justify-evenly">
+        <div className="flex flex-col justify-evenly items-center">
+          <div className="w-[70vw] h-[30vh] rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl p-6">
+            <TopMenu
+              mode={mode}
+              setMode={setMode}
+              gameConfig={gameConfig}
+              setGameConfig={setGameConfig}
+            />
+          </div>
+          <div className="w-[70vw] h-[60vh]">
+            <CenterPanel
+              mode={mode}
+              onStart={onStart}
+              gameConfig={gameConfig}
+              setGameConfig={setGameConfig}
+            />
+          </div>
         </div>
-        <div className="w-[70vw] h-[60vh]">
-          <CenterPanel
-            mode={mode}
-            onStart={onStart}
-            gameConfig={gameConfig}
-            setGameConfig={setGameConfig}
-          />
+        <div className="flex flex-col items-center justify-evenly">
+          <div className="flex items-center justify-evenly gap-5">
+            <Button
+              name={"Logout"}
+              baseColor="red"
+              textColor="red"
+              size="md"
+              onClick={()=> handleLogout(onLogout)}
+            />
+            <ProfileCard
+              name={"Vivek Sharma"}
+              country={"IND"}
+              rating={"5000"}
+              avatar={avatar3}
+            />
+          </div>
+          <div className="w-[25vw] h-[80vh] rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl"></div>
         </div>
-      </div>
-      <div className="flex flex-col items-center justify-evenly gap-5">
-        <ProfileCard
-          name={"Vivek Sharma"}
-          country={"IND"}
-          rating={"5000"}
-          avatar={avatar3}
-        />
-        <div className="w-[25vw] h-[82vh] rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl"></div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }

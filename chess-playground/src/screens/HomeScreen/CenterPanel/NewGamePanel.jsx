@@ -13,7 +13,7 @@ export default function NewGamePanel({ onStart, gameConfig, setGameConfig, mode 
       <div className="h-[60vh] w-[30%] flex flex-col justify-evenly">
         <BotDifficultySelector gameConfig={gameConfig} setGameConfig={setGameConfig}/>
         <div className="p-3 flex justify-center">
-          <Button onStart={onStart} gameConfig={gameConfig}/>
+          <Button onClick={onStart} gameConfig={gameConfig} name={"Get Started"}/>
         </div>
       </div>
       <div className="w-[30%]">

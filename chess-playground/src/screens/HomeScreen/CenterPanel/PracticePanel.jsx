@@ -11,7 +11,7 @@ export default function PracticePanel({
   // });
   return (
     <div>
-      <Button onStart={onStart} gameConfig={gameConfig} />
+      <Button onClick={onStart} gameConfig={gameConfig} name={"Get Started"}/>
     </div>
   );
 }

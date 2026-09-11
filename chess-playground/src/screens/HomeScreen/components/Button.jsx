@@ -1,16 +1,24 @@
 import SpecularButton from "@/components/ui/SpecularButton/SpecularButton";
 
-export default function Button({onStart}) {
+export default function Button({
+  onClick,
+  name,
+  size="lg",
+  textColor="#f5f5f5",
+  tint="#ffffff",
+  baseColor="#525252",
+  lineColor="#ffffff",
+}) {
   return (
     <SpecularButton
-      size="lg"
+      size={size}
       radius={18}
-      tint="#ffffff"
+      tint={tint}
       tintOpacity={0}
       blur={0}
-      textColor="#f5f5f5"
-      lineColor="#ffffff"
-      baseColor="#525252"
+      textColor={textColor}
+      lineColor={lineColor}
+      baseColor={baseColor}
       intensity={1}
       shineSize={10}
       shineFade={40}
@@ -19,9 +27,9 @@ export default function Button({onStart}) {
       followMouse
       proximity={250}
       autoAnimate
-      onClick={onStart}
+      onClick={onClick}
     >
-      Get Started
+      {name}
     </SpecularButton>
   );
 }
