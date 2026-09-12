@@ -96,7 +96,11 @@ export async function deleteFriendService(currentUserId, friendId) {
   return currentUser;
 }
 export async function getFriendsService(currentUserId) {
-  return await User.findById(currentUserId)
-    .populate("friends", "username fullName avatar rating isOnline")
-    .select("friends");
+  const currentUser = await User.findById(currentUserId)
+    .populate(
+        "friends",
+        "username fullName avatar rating"
+    );
+  return currentUser.friends
+
 }

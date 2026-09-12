@@ -37,7 +37,15 @@ export function initSocket(server) {
     socket.on("inviteFriend", async (friendId) => {
       console.log("sent to: ", friendId);
       console.log("sent by: ", socket.user.username);
-      
+      const receiverSockets = onlineUsers.get(friendId);
+      if(!receiverSockets){
+        socket.emit("friendOffline")
+      }
+      for(const socketId of receiverSockets){
+        io.to(socketId).emit("gameInvite", {
+          sender: socket.user.username
+        })
+      }
     });
 
     socket.on("disconnect", (reason) => {
