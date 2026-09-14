@@ -1,5 +1,6 @@
 import { useState } from "react";
 import socket from "../../lib/socket.js";
+import AuthCard from "./AuthCard.jsx";
 
 export default function LoginScreen({ onLogin }) {
   const [username, setUsername] = useState("");
@@ -107,6 +108,7 @@ export default function LoginScreen({ onLogin }) {
           </button>
         </form>
       </div>
+      <AuthCard/>
     </main>
   );
 }
