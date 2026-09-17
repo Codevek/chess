@@ -109,8 +109,10 @@ export async function loginService(loginData) {
 }
 
 export async function logoutService(userId) {
+  const now = new Date()
   await User.findByIdAndUpdate(userId, {
-    $set: {refreshToken: undefined}
+    $set: {refreshToken: undefined},
+    $set: {lastSeen: now}
   }, {new: true})
 }
 
