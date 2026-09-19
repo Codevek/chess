@@ -9,6 +9,7 @@ import Button from "./components/Button";
 import BoardScreen from "../BoardScreen/BoardScreen";
 import socket from "@/lib/socket";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
+import { useEffect } from "react";
 
 export default function HomeScreen({
   mode,
@@ -37,6 +38,21 @@ export default function HomeScreen({
       console.log(error);
     }
   }
+
+  useEffect(() => {
+    socket.on("gameInvite", ({ sender }) => {
+      // setInvite({
+      //   sender,
+      //   visible: true,
+      // });
+      console.log(sender);
+      
+    });
+
+    return () => {
+      socket.off("gameInvite");
+    };
+  }, []);
 
   return (
     <>
@@ -67,7 +83,7 @@ export default function HomeScreen({
               baseColor="red"
               textColor="red"
               size="md"
-              onClick={()=> handleLogout(onLogout)}
+              onClick={() => handleLogout(onLogout)}
             />
             <ProfileCard
               name={"Vivek Sharma"}

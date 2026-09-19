@@ -54,7 +54,7 @@ export default function FriendPanel() {
             //     +
             //   </button>
             // </div>
-            <Friend name= {friend.fullName} rating={friend.rating} lastSeen={friend.lastSeen} country={friend.country}/>
+            <Friend name= {friend.fullName} rating={friend.rating} lastSeen={friend.lastSeen} country={friend.country} friend={friend}/>
           ))}
         </div>
       </div>

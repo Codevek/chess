@@ -1,3 +1,4 @@
+import socket from "@/lib/socket";
 import InviteButton from "./InviteButton";
 
 export default function Friend({
@@ -9,8 +10,16 @@ export default function Friend({
   isPlaying,
   inMatchFor,
   lastSeen,
+  friend
 }) {
   //   const [relSeen, relLastSeen] = useState(null);
+
+
+  function inviteFriend(){
+    socket.emit("inviteFriend", friend._id)
+  }
+
+
   let relLastSeen;
   const now = new Date();
   const lastSeenDate = new Date(lastSeen);
@@ -72,7 +81,7 @@ export default function Friend({
           </div>
         </div>
       </div>
-      <InviteButton />
+      <InviteButton onClick = {inviteFriend} />
     </div>
   );
 }

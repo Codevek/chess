@@ -33,10 +33,11 @@ export function initSocket(server) {
     }
     onlineUsers.get(userId).push(currentSocketId);
     logOnlineUsers();
+    socket.emit("friendsOnline", )
 
     socket.on("inviteFriend", async (friendId) => {
       console.log("sent to: ", friendId);
-      console.log("sent by: ", socket.user.username);
+      console.log("sent by: ", socket.user.fullName);
       const receiverSockets = onlineUsers.get(friendId);
       if(!receiverSockets){
         socket.emit("friendOffline")

@@ -1,5 +1,5 @@
-export default function InviteButton(){
+export default function InviteButton({onClick}){
     return(
-        <div className="flex justify-center items-center">📩</div>
+        <div className="flex justify-center items-center" onClick={onClick}>📩</div>
     )
 }
