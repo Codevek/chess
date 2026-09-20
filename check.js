@@ -45,6 +45,9 @@ const diffInDays = Math.floor(diffInHours / 24);
 
 // Format automatically (e.g., "in 5 hours" or "5 hours ago")
 const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+//real shii
+
+
 // console.log(rtf.format(diffInHours, "hour"));
 // console.log(diffInHours);
 
@@ -54,16 +57,16 @@ const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
 // // console.log(hoursDiff);
 // console.log(Math.abs(diffInDays));
 
-if (Math.abs(diffInSecs) >= 60) {
-  if (Math.abs(diffInMins) >= 60) {
-    if (Math.abs(diffInHours) >= 24) {
-      console.log(rtf.format(diffInDays, "day"));
-    } else {
-      console.log(rtf.format(diffInHours, "hour"));
-    }
-  } else {
-    console.log(rtf.format(diffInMins, "minute"));
-  }
-} else {
-  console.log(rtf.format(diffInSecs, "second"));
-}
+// if (Math.abs(diffInSecs) >= 60) {
+//   if (Math.abs(diffInMins) >= 60) {
+//     if (Math.abs(diffInHours) >= 24) {
+//       console.log(rtf.format(diffInDays, "day"));
+//     } else {
+//       console.log(rtf.format(diffInHours, "hour"));
+//     }
+//   } else {
+//     console.log(rtf.format(diffInMins, "minute"));
+//   }
+// } else {
+//   console.log(rtf.format(diffInSecs, "second"));
+// }
