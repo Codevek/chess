@@ -6,6 +6,7 @@ import { DEFAULT_GAME_CONFIG } from "@/lib/gameConfig";
 import createGameSesssion from "./lib/createGameSession";
 import socket from "./lib/socket.js";
 import LoginScreen from "./screens/AuthScreen/LoginScreen";
+import InvitePopup from "./components/popups/InvitePopup";
 
 export default function App() {
   const [mode, setMode] = useState(MENU_MODE.HOME);
@@ -31,9 +32,8 @@ export default function App() {
     setGameSession(session);
     setScreen("boardScreen");
   }
-  function handleQuitGame(){
-    setScreen("homeScreen")
-
+  function handleQuitGame() {
+    setScreen("homeScreen");
   }
 
   if (screen === "homeScreen") {
@@ -52,4 +52,5 @@ export default function App() {
   } else if(screen === "loginScreen"){
     return <LoginScreen onLogin={() => setScreen("homeScreen")} />
   }
+  // return <InvitePopup sender={"hey"} />;
 }

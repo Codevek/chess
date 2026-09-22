@@ -10,6 +10,7 @@ import BoardScreen from "../BoardScreen/BoardScreen";
 import socket from "@/lib/socket";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { useEffect } from "react";
+import InvitePopup from "@/components/popups/InvitePopup";
 
 export default function HomeScreen({
   mode,
@@ -19,6 +20,9 @@ export default function HomeScreen({
   onStart,
   onLogout,
 }) {
+
+  const [invite, setInvite] = useState(null)
+
   function disconnectSocket() {
     if (socket.disconnected) return Promise.resolve();
     socket.disconnect();
@@ -41,11 +45,13 @@ export default function HomeScreen({
 
   useEffect(() => {
     socket.on("gameInvite", ({ sender }) => {
-      // setInvite({
-      //   sender,
-      //   visible: true,
-      // });
+      setInvite({
+        sender: sender,
+        visible: true,
+      });
       console.log(sender);
+      console.log("Invited to play by: ", sender);
+      
       
     });
 
@@ -92,8 +98,9 @@ export default function HomeScreen({
               avatar={avatar3}
             />
           </div>
-          <div className="w-[25vw] h-[80vh] rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl"></div>
+          <div className="w-[25vw] h-[80vh] rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl"><PuzzleList/></div>
         </div>
+        {invite && <InvitePopup sender={invite.sender} setInvite={setInvite}/>}
       </main>
     </>
   );

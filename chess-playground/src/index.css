@@ -60,6 +60,48 @@
     outline-offset: 2px;
   }
 }
+.accept {
+  margin-top: 10px;
+  user-select: none;
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #08a300;
+  background: rgba(134, 252, 132, 0.15);
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+  margin-bottom: 10px;
+
+  &:hover {
+    border-color: rgba(136, 252, 132, 0.5);
+  }
+  &:focus-visible {
+    outline: 2px solid #84fcba;
+    outline-offset: 2px;
+  }
+}
+.decline {
+  margin-top: 10px;
+  user-select: none;
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #f61111;
+  background: rgba(252, 132, 132, 0.15);
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+  margin-bottom: 10px;
+
+  &:hover {
+    border-color: rgba(252, 132, 132, 0.5);
+  }
+  &:focus-visible {
+    outline: 2px solid #fc8484;
+    outline-offset: 2px;
+  }
+}
+
+
 
 @custom-variant dark (&:is(.dark *));
 
