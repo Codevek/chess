@@ -97,7 +97,7 @@ export default function ProfileCoverflow({
             return (
               <motion.div
                 key={profile.id ?? index}
-                onClick={() => handleCardClick(index, hidden, isFocus)}
+                // onClick={() => handleCardClick(index, hidden, isFocus)}
                 className="absolute select-none"
                 style={{
                   width: `${cardWidth}px`,

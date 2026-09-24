@@ -3,19 +3,29 @@ import Friend from "../components/Friend";
 import TimerControl from "../components/TimerControl";
 import ChessProfileSelector from "@/components/aicanvas/tilted-coverflow";
 import MatchmakingPanel from "../components/MatchMakingPanel";
+import socket from "@/lib/socket";
 
 export default function FriendPanel() {
   const [friends, setFriends] = useState([]);
-
+  const [friendIndex, setFriendIndex] = useState(0);
   const [search, setSearch] = useState("");
+  const [isSpinning, setIsSpinning] = useState(false);
 
   // const filteredFriends = friends.filter(f => f.name.toLowerCase().includes(search.toLowerCase()));
 
-  const handleInvite = (name) => {
-    onShowToast(
-      `Challenge dispatched to ${name}! Waiting for accept...`,
-      "send",
-    );
+  const handleInviteClick = (index, friend) => {
+    // trigger toast
+    // onShowToast(
+    //   `Challenge dispatched to ${friend.fullName}! Waiting for accept...`,
+    //   "send",
+    // );
+
+    // trigger socket
+    socket.emit("inviteFriend", friend._id);
+
+    // update state for MatchmakingPanel
+    setFriendIndex(index + 1); // +1 because 0 is EMPTY_PROFILE
+    setIsSpinning(true);
   };
 
   const handleSelectOpponent = (profile) => {
@@ -57,6 +67,7 @@ export default function FriendPanel() {
               lastSeen={friend.lastSeen}
               country={friend.country}
               friend={friend}
+              onInviteClick={() => handleInviteClick(index, friend)}
             />
           ))}
         </div>
@@ -70,7 +81,7 @@ export default function FriendPanel() {
           <div className="border border-zinc-500 h-30 w-30 rounded-full"></div>
         </div>
       </div> */}
-      <MatchmakingPanel friends={friends}/>
+      <MatchmakingPanel friends={friends} friendIndex={friendIndex} isSpinning={isSpinning} setIsSpinning={setIsSpinning} />
     </div>
   );
 }

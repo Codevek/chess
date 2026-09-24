@@ -10,13 +10,15 @@ export default function Friend({
   isPlaying,
   inMatchFor,
   lastSeen,
-  friend
+  friend,
+  onInviteClick
 }) {
   //   const [relSeen, relLastSeen] = useState(null);
 
 
   function inviteFriend(){
     socket.emit("inviteFriend", friend._id)
+    onInviteClick(2)
   }
 
 
@@ -81,7 +83,7 @@ export default function Friend({
           </div>
         </div>
       </div>
-      <InviteButton onClick = {inviteFriend} />
+      <InviteButton onClick = {inviteFriend}/>
     </div>
   );
 }
