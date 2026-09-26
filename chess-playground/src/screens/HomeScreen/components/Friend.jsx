@@ -33,7 +33,7 @@ export default function Friend({
   const diffInDays = Math.floor(diffInHours / 24);
 
   const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
-  console.log(lastSeenDate);
+  // console.log(lastSeenDate);
   if (lastSeen) {
     if (Math.abs(diffInSecs) >= 60) {
       if (Math.abs(diffInMins) >= 60) {

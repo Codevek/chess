@@ -20,8 +20,7 @@ export default function HomeScreen({
   onStart,
   onLogout,
 }) {
-
-  const [invite, setInvite] = useState(null)
+  const [invite, setInvite] = useState(null);
 
   function disconnectSocket() {
     if (socket.disconnected) return Promise.resolve();
@@ -51,14 +50,22 @@ export default function HomeScreen({
       });
       console.log(sender);
       console.log("Invited to play by: ", sender);
-      
-      
     });
 
     return () => {
       socket.off("gameInvite");
     };
   }, []);
+
+  const handleAcceptInvite = ()=> {
+    socket.emit("acceptInvite", {
+        senderId: invite.sender._id,
+    });
+    setInvite(null)
+    console.log("Invite Accepted");
+    
+    
+  }
 
   return (
     <>
@@ -98,9 +105,11 @@ export default function HomeScreen({
               avatar={avatar3}
             />
           </div>
-          <div className="w-[25vw] h-[80vh] rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl"><PuzzleList/></div>
+          <div className="w-[25vw] h-[80vh] rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl">
+            <PuzzleList />
+          </div>
         </div>
-        {invite && <InvitePopup sender={invite.sender} setInvite={setInvite}/>}
+        {invite && <InvitePopup sender={invite.sender} setInvite={setInvite} handleAcceptInvite={handleAcceptInvite}/>}
       </main>
     </>
   );

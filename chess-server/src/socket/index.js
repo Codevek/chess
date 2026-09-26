@@ -36,18 +36,27 @@ export function initSocket(server) {
     socket.emit("friendsOnline", )
 
     socket.on("inviteFriend", async (friendId) => {
-      console.log("sent to: ", friendId);
-      console.log("sent by: ", socket.user.fullName);
-      const receiverSockets = onlineUsers.get(friendId);
-      if(!receiverSockets){
-        socket.emit("friendOffline")
-      }
-      for(const socketId of receiverSockets){
-        io.to(socketId).emit("gameInvite", {
-          sender: socket.user.username
-        })
+      try {
+        const receiverSockets = onlineUsers.get(friendId);
+        if(!receiverSockets){
+          socket.emit("friendOffline")
+        }
+        for(const socketId of receiverSockets){
+          io.to(socketId).emit("gameInvite", {
+            sender: socket.user
+          })
+        }
+        console.log("sent to: ", friendId);
+        console.log("sent by: ", socket.user.fullName);
+      } catch (error) {
+        console.log(`The user is not online !\n`, error);
+        
       }
     });
+
+    socket.on("acceptInvite", async ({senderId}) => {
+      console.log("accepted", senderId);
+    })
 
     socket.on("disconnect", (reason) => {
       const sockets = onlineUsers.get(userId) ?? [];
