@@ -40,6 +40,7 @@ export function initSocket(server) {
         const receiverSockets = onlineUsers.get(friendId);
         if(!receiverSockets){
           socket.emit("friendOffline")
+          return
         }
         for(const socketId of receiverSockets){
           io.to(socketId).emit("gameInvite", {
@@ -56,6 +57,22 @@ export function initSocket(server) {
 
     socket.on("acceptInvite", async ({senderId}) => {
       console.log("accepted", senderId);
+      const senderSockets = onlineUsers.get(senderId)
+      console.log(senderSockets);
+      const roomId = crypto.randomUUID()
+      socket.join(roomId)
+
+      for(const socketId of senderSockets){
+        io.sockets.sockets.get(socketId)?.join(roomId)
+      }
+
+      const payload = {
+        roomId,
+        white: senderId,
+        black: socket.user._id
+      }
+
+      io.to(roomId).emit("gameStarted", payload);
     })
 
     socket.on("disconnect", (reason) => {

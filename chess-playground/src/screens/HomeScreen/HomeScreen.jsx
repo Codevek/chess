@@ -57,15 +57,17 @@ export default function HomeScreen({
     };
   }, []);
 
-  const handleAcceptInvite = ()=> {
+  const handleAcceptInvite = () => {
     socket.emit("acceptInvite", {
-        senderId: invite.sender._id,
+      senderId: invite.sender._id,
     });
-    setInvite(null)
+    setInvite(null);
     console.log("Invite Accepted");
-    
-    
-  }
+
+    socket.on("gameStarted", (game) => {
+      console.log(game);
+    });
+  };
 
   return (
     <>
@@ -109,7 +111,13 @@ export default function HomeScreen({
             <PuzzleList />
           </div>
         </div>
-        {invite && <InvitePopup sender={invite.sender} setInvite={setInvite} handleAcceptInvite={handleAcceptInvite}/>}
+        {invite && (
+          <InvitePopup
+            sender={invite.sender}
+            setInvite={setInvite}
+            handleAcceptInvite={handleAcceptInvite}
+          />
+        )}
       </main>
     </>
   );
