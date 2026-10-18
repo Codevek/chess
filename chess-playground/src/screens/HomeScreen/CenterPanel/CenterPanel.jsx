@@ -46,7 +46,7 @@ export default function CenterPanel({
       break;
 
     case MENU_MODE.FRIEND:
-      content = <FriendPanel />;
+      content = <FriendPanel acceptedFriendIndex={1}/>;
       break;
 
     case MENU_MODE.SETTINGS:

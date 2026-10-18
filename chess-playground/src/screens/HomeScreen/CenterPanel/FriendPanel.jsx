@@ -5,7 +5,7 @@ import ChessProfileSelector from "@/components/aicanvas/tilted-coverflow";
 import MatchmakingPanel from "../components/MatchMakingPanel";
 import socket from "@/lib/socket";
 
-export default function FriendPanel() {
+export default function FriendPanel({acceptedFriendIndex}) {
   const [friends, setFriends] = useState([]);
   const [friendIndex, setFriendIndex] = useState(0);
   const [search, setSearch] = useState("");
@@ -24,9 +24,18 @@ export default function FriendPanel() {
     socket.emit("inviteFriend", friend._id);
 
     // update state for MatchmakingPanel
-    setFriendIndex(index + 1); // +1 because 0 is EMPTY_PROFILE
+    // setFriendIndex(index + 1); // +1 because 0 is EMPTY_PROFILE
     setIsSpinning(true);
+    console.log(friendIndex);
+    
   };
+
+  useEffect(() => {
+    if (acceptedFriendIndex != null) {
+        setFriendIndex(acceptedFriendIndex);
+        setIsSpinning(false);
+    }
+}, [acceptedFriendIndex]);
 
   const handleSelectOpponent = (profile) => {
     console.log("Opponent selected:", profile);

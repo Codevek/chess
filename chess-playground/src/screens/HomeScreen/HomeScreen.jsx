@@ -11,6 +11,7 @@ import socket from "@/lib/socket";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { useEffect } from "react";
 import InvitePopup from "@/components/popups/InvitePopup";
+import { io } from "socket.io-client";
 
 export default function HomeScreen({
   mode,
@@ -42,18 +43,54 @@ export default function HomeScreen({
     }
   }
 
+  // useEffect(() => {
+  //   socket.on("gameInvite", ({ sender }) => {
+  //     setInvite({
+  //       sender: sender,
+  //       visible: true,
+  //     });
+  //     console.log(sender);
+  //     console.log("Invited to play by: ", sender);
+  //   });
+
+  //   return () => {
+  //     socket.off("gameInvite");
+  //   };
+  // }, []);
+
+  // const handleAcceptInvite = () => {
+  //   socket.emit("acceptInvite", {
+  //     senderId: invite.sender._id,
+  //   });
+  //   setInvite(null);
+  //   console.log("Invite Accepted");
+
+  //   socket.on("gameStarted", (payload) => {
+  //     console.log(payload);
+  //   });
+  // };
+
   useEffect(() => {
-    socket.on("gameInvite", ({ sender }) => {
+    const handleGameInvite = ({ sender }) => {
       setInvite({
-        sender: sender,
+        sender,
         visible: true,
       });
+
       console.log(sender);
-      console.log("Invited to play by: ", sender);
-    });
+      console.log("Invited to play by:", sender);
+    };
+
+    const handleGameStarted = (game) => {
+      console.log("GAME STARTED:", game);
+    };
+
+    socket.on("gameInvite", handleGameInvite);
+    socket.on("gameStarted", handleGameStarted);
 
     return () => {
-      socket.off("gameInvite");
+      socket.off("gameInvite", handleGameInvite);
+      socket.off("gameStarted", handleGameStarted);
     };
   }, []);
 
@@ -61,12 +98,10 @@ export default function HomeScreen({
     socket.emit("acceptInvite", {
       senderId: invite.sender._id,
     });
-    setInvite(null);
-    console.log("Invite Accepted");
 
-    socket.on("gameStarted", (game) => {
-      console.log(game);
-    });
+    setInvite(null);
+
+    console.log("Invite Accepted");
   };
 
   return (
