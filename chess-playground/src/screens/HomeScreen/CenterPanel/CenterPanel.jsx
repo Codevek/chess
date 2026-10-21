@@ -11,6 +11,7 @@ export default function CenterPanel({
   onStart,
   gameConfig,
   setGameConfig,
+  gameStarted
 }) {
   let content;
 
@@ -46,7 +47,7 @@ export default function CenterPanel({
       break;
 
     case MENU_MODE.FRIEND:
-      content = <FriendPanel acceptedFriendIndex={1}/>;
+      content = <FriendPanel gameStarted={gameStarted}/>;
       break;
 
     case MENU_MODE.SETTINGS:

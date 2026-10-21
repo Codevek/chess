@@ -5,9 +5,9 @@ import ChessProfileSelector from "@/components/aicanvas/tilted-coverflow";
 import MatchmakingPanel from "../components/MatchMakingPanel";
 import socket from "@/lib/socket";
 
-export default function FriendPanel({acceptedFriendIndex}) {
+export default function FriendPanel({ gameStarted }) {
   const [friends, setFriends] = useState([]);
-  const [friendIndex, setFriendIndex] = useState(0);
+  const [acceptedFriend, setAcceptedFriend] = useState(null);
   const [search, setSearch] = useState("");
   const [isSpinning, setIsSpinning] = useState(false);
 
@@ -26,16 +26,22 @@ export default function FriendPanel({acceptedFriendIndex}) {
     // update state for MatchmakingPanel
     // setFriendIndex(index + 1); // +1 because 0 is EMPTY_PROFILE
     setIsSpinning(true);
-    console.log(friendIndex);
-    
+    // console.log(friendIndex);
   };
 
   useEffect(() => {
-    if (acceptedFriendIndex != null) {
-        setFriendIndex(acceptedFriendIndex);
-        setIsSpinning(false);
+    if (!gameStarted || friends.length === 0) return;
+
+    const opponent = friends.find(
+      (friend) =>
+        friend._id === gameStarted.white || friend._id === gameStarted.black,
+    );
+
+    if (opponent) {
+      setAcceptedFriend(opponent);
+      setIsSpinning(false);
     }
-}, [acceptedFriendIndex]);
+  }, [gameStarted, friends]);
 
   const handleSelectOpponent = (profile) => {
     console.log("Opponent selected:", profile);
@@ -71,6 +77,7 @@ export default function FriendPanel({acceptedFriendIndex}) {
         <div className="flex flex-col gap-1">
           {friends.map((friend, index) => (
             <Friend
+              key={friend._id}
               name={friend.fullName}
               rating={friend.rating}
               lastSeen={friend.lastSeen}
@@ -90,7 +97,12 @@ export default function FriendPanel({acceptedFriendIndex}) {
           <div className="border border-zinc-500 h-30 w-30 rounded-full"></div>
         </div>
       </div> */}
-      <MatchmakingPanel friends={friends} friendIndex={friendIndex} isSpinning={isSpinning} setIsSpinning={setIsSpinning} />
+      <MatchmakingPanel
+        friends={friends}
+        acceptedFriend={acceptedFriend}
+        isSpinning={isSpinning}
+        setIsSpinning={setIsSpinning}
+      />
     </div>
   );
 }

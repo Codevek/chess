@@ -22,6 +22,7 @@ export default function HomeScreen({
   onLogout,
 }) {
   const [invite, setInvite] = useState(null);
+  const [gameStarted, setGameStarted] = useState(null);
 
   function disconnectSocket() {
     if (socket.disconnected) return Promise.resolve();
@@ -83,6 +84,7 @@ export default function HomeScreen({
 
     const handleGameStarted = (game) => {
       console.log("GAME STARTED:", game);
+      setGameStarted(game);
     };
 
     socket.on("gameInvite", handleGameInvite);
@@ -123,6 +125,7 @@ export default function HomeScreen({
               onStart={onStart}
               gameConfig={gameConfig}
               setGameConfig={setGameConfig}
+              gameStarted={gameStarted}
             />
           </div>
         </div>
