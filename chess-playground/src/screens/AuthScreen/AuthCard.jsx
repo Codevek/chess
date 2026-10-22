@@ -104,18 +104,12 @@ export default function AuthCard() {
               </button>
 
               <div className="pt-4">
-                <div className="relative flex py-2 items-center">
+                {/* <div className="relative flex py-2 items-center">
                   <div className="grow border-t border-apex-border"></div>
                   <span className="flex-shrink mx-4 text-xs font-mono text-slate-500 uppercase tracking-wider">Or authenticate via</span>
                   <div className="flex-grow border-t border-apex-border"></div>
-                </div>
-                <div className="grid grid-cols-4 gap-2.5 mt-3">
-                  <button type="button" className="py-2.5 px-3 rounded-lg bg-apex-elevated border border-apex-border hover:border-purple-500/50 hover:bg-apex-hover transition-all flex items-center justify-center text-amber-400 font-bold text-xs" title="Link FIDE / Chess ID">FIDE</button>
-                  {/* Add Google/Discord/Github icons here similar to HTML */}
-                  <button type="button" className="py-2.5 px-3 rounded-lg bg-apex-elevated border border-apex-border hover:border-purple-500/50 hover:bg-apex-hover text-white text-xs font-bold transition-all flex items-center justify-center">GH</button>
-                  <button type="button" className="py-2.5 px-3 rounded-lg bg-apex-elevated border border-apex-border hover:border-purple-500/50 hover:bg-apex-hover text-[#5865F2] text-xs font-bold transition-all flex items-center justify-center">DC</button>
-                  <button type="button" className="py-2.5 px-3 rounded-lg bg-apex-elevated border border-apex-border hover:border-purple-500/50 hover:bg-apex-hover text-white text-xs font-bold transition-all flex items-center justify-center">GOO</button>
-                </div>
+                </div> */}
+                
               </div>
             </form>
           ) : (
