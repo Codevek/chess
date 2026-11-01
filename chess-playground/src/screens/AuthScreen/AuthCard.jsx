@@ -1,13 +1,16 @@
 import { useState } from 'react';
 
-export default function AuthCard() {
+export default function AuthCard({handleSubmit}) {
   const [mode, setMode] = useState('signin'); // 'signin' or 'register'
   const [showPassword, setShowPassword] = useState(false);
   const [regPassword, setRegPassword] = useState('');
 
   const handleSignIn = (e) => {
     e.preventDefault();
-    alert('Logging in with CHESSMAN Security Protocol...');
+    // alert('Logging in with CHESSMAN Security Protocol...');
+    handleSubmit(e)
+    console.log("yep here");
+    
   };
 
   const handleRegister = (e) => {

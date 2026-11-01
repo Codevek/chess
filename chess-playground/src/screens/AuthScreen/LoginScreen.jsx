@@ -69,7 +69,7 @@ export default function LoginScreen({ onLogin }) {
 
   return (
     <main className="min-h-screen bg-[#1b1b20] flex overflow-hidden justify-center items-center gap-14">
-      <div className="h-[80vh] w-[80vw] border border-zinc-700 rounded-2xl shadow-xl shadow-zinc-800 flex items-center flex-col justify-center">
+      {/* <div className="h-[80vh] w-[80vw] border border-zinc-700 rounded-2xl shadow-xl shadow-zinc-800 flex items-center flex-col justify-center">
         <form
           className="form flex flex-col items-center p-6 gap-5"
           onSubmit={handleSubmit}
@@ -107,8 +107,8 @@ export default function LoginScreen({ onLogin }) {
             {isLoggingIn ? "Logging in..." : "Login"}
           </button>
         </form>
-      </div>
-      <AuthCard/>
+      </div> */}
+      <AuthCard handleSubmit={handleSubmit}/>
     </main>
   );
 }
