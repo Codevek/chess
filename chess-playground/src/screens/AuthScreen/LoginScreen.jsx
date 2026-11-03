@@ -7,6 +7,7 @@ export default function LoginScreen({ onLogin }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
 
   function connectSocket() {
     if (socket.connected) return Promise.resolve();
@@ -108,7 +109,7 @@ export default function LoginScreen({ onLogin }) {
           </button>
         </form>
       </div> */}
-      <AuthCard handleSubmit={handleSubmit}/>
+      <AuthCard handleSubmit={handleSubmit} username={username} password={password} setPassword={setPassword} setUsername={setUsername}/>
     </main>
   );
 }
