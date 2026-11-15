@@ -32,39 +32,75 @@ export default function LoginScreen({ onLogin }) {
     });
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit({ username, password }) {
     setError("");
     setIsLoggingIn(true);
 
     try {
-      let res = await fetch("http://localhost:5000/auth/login", {
+      const res = await fetch("http://localhost:5000/auth/login", {
         method: "POST",
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: username, password }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
       });
-      let body = await res.json();
+
+      const body = await res.json();
 
       if (!res.ok) {
-        res = await fetch("http://localhost:5000/auth/login", {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password }),
-        });
-        body = await res.json();
-        if (!res.ok) {
-          setError(body.message || "Login failed");
-        } 
+        throw new Error(body.message || "Login failed");
       }
 
       await connectSocket();
+
       onLogin();
     } catch (requestError) {
       setError(requestError.message || "Unable to log in. Please try again.");
     } finally {
       setIsLoggingIn(false);
+    }
+  }
+
+  async function handleRegister(formData) {
+    setError("");
+    setIsRegistering(true);
+
+    try {
+      const res = await fetch("http://localhost:5000/auth/register", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          country: formData.country,
+        }),
+      });
+
+      const body = await res.json();
+
+      if (!res.ok) {
+        throw new Error(body.message || "Registration failed");
+      }
+
+      // Registration succeeded.
+      // Now log in using the newly created account.
+      await handleSubmit({
+        username: formData.username,
+        password: formData.password,
+      });
+    } catch (requestError) {
+      setError(requestError.message || "Unable to register. Please try again.");
+    } finally {
+      setIsRegistering(false);
     }
   }
 
@@ -109,7 +145,13 @@ export default function LoginScreen({ onLogin }) {
           </button>
         </form>
       </div> */}
-      <AuthCard handleSubmit={handleSubmit} username={username} password={password} setPassword={setPassword} setUsername={setUsername}/>
+      <AuthCard
+        handleSubmit={handleSubmit}
+        handleRegister={handleRegister}
+        error={error}
+        isLoggingIn={isLoggingIn}
+        isRegistering={isRegistering}
+      />
     </main>
   );
 }
