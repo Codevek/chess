@@ -3,10 +3,6 @@ import { useState } from "react";
 export default function AuthCard({
   handleSubmit,
   handleRegister,
-  username,
-  setUsername,
-  password,
-  setPassword,
   error,
   isLoggingIn,
   isRegistering,
@@ -14,13 +10,21 @@ export default function AuthCard({
   const [mode, setMode] = useState("signin"); // 'signin' or 'register'
   const [showPassword, setShowPassword] = useState(false);
   const [regPassword, setRegPassword] = useState("");
-  
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [fullName, setFullName] = useState("");
+  const [registerUsername, setRegisterUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [country, setCountry] = useState("India");
 
   const handleSignIn = (e) => {
     e.preventDefault();
     // alert('Logging in with CHESSMAN Security Protocol...');
-    handleSubmit(e);
-    console.log("yep here");
+    handleSubmit({
+      username,
+      password,
+    });
   };
 
   // const handleRegister = (e) => {
@@ -49,6 +53,50 @@ export default function AuthCard({
     };
   };
 
+  //   const handleRegister = (e) => {
+  //   e.preventDefault();
+
+  //   if (regPassword !== confirmPassword) {
+  //     alert("Passwords do not match!");
+  //     return;
+  //   }
+
+  //   if (regPassword.length < 8) {
+  //     alert("Password must contain at least 8 characters.");
+  //     return;
+  //   }
+
+  //   if (fullName.trim().length < 4) {
+  //     alert("Full name must contain at least 4 characters.");
+  //     return;
+  //   }
+
+  //   if (chessHandle.trim().length < 3) {
+  //     alert("Chess handle must contain at least 3 characters.");
+  //     return;
+  //   }
+
+  //   handleRegisterRequest({
+  //     fullName: fullName.trim(),
+  //     username: chessHandle.trim(),
+  //     email: email.trim(),
+  //     password: regPassword,
+  //     country,
+  //   });
+  // };
+
+  const handleRegisterSubmit = (e) => {
+    e.preventDefault();
+
+    handleRegister({
+      fullName,
+      username: registerUsername,
+      email,
+      password: regPassword,
+      country,
+    });
+  };
+
   const strength = getStrength(regPassword);
 
   return (
@@ -75,11 +123,6 @@ export default function AuthCard({
                 </p>
               </div>
             </div>
-            <div className="hidden sm:block">
-              <span className="text-xs font-mono text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2.5 py-1 rounded-md">
-                SECURE AUTH v2
-              </span>
-            </div>
           </div>
 
           <div className="my-6 p-1 bg-apex-elevated rounded-xl border border-apex-border flex gap-1 relative">
@@ -104,23 +147,8 @@ export default function AuthCard({
                   Email Address or Chess Handle
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
-                      ></path>
-                    </svg>
-                  </div>
                   <input
-                    className="w-full pl-10 pr-4 py-2.5 bg-apex-elevated border border-apex-border rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
+                    className="w-full pl-4 pr-4 py-2.5 bg-apex-elevated border border-apex-border rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
                     placeholder="name@domain.com or @username"
                     required
                     type="text"
@@ -143,24 +171,9 @@ export default function AuthCard({
                   </a>
                 </div>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                      ></path>
-                    </svg>
-                  </div>
                   <input
-                    className="w-full pl-10 pr-10 py-2.5 bg-apex-elevated border border-apex-border rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
-                    placeholder="Enter your security phrase"
+                    className="w-full pl-4 pr-10 py-2.5 bg-apex-elevated border border-apex-border rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
+                    placeholder="Enter your secure password"
                     required
                     type={showPassword ? "text" : "password"}
                     value={password}
@@ -171,6 +184,7 @@ export default function AuthCard({
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white focus:outline-none"
                   >
+                    {/* Eye Logo */}
                     <svg
                       className="w-4 h-4"
                       fill="none"
@@ -205,11 +219,17 @@ export default function AuthCard({
                     Keep session active for 30 days
                   </span>
                 </label>
-                <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1">
+                {/* <span className="text-[11px] font-mono text-emerald-400 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>{" "}
                   2FA Supported
-                </span>
+                </span> */}
               </div>
+
+              {error && (
+                <p className="text-sm text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-lg px-3 py-2">
+                  {error}
+                </p>
+              )}
 
               <button
                 className="w-full mt-3 py-3 px-4 rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-sm tracking-wider uppercase shadow-glow-purple transition-all duration-200 transform hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
@@ -230,17 +250,9 @@ export default function AuthCard({
                   ></path>
                 </svg>
               </button>
-
-              <div className="pt-4">
-                {/* <div className="relative flex py-2 items-center">
-                  <div className="grow border-t border-apex-border"></div>
-                  <span className="flex-shrink mx-4 text-xs font-mono text-slate-500 uppercase tracking-wider">Or authenticate via</span>
-                  <div className="flex-grow border-t border-apex-border"></div>
-                </div> */}
-              </div>
             </form>
           ) : (
-            <form className="space-y-4" onSubmit={handleRegister}>
+            <form className="space-y-4" onSubmit={handleRegisterSubmit}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
@@ -251,6 +263,8 @@ export default function AuthCard({
                     placeholder="e.g. Vivek Sharma"
                     required
                     type="text"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
                   />
                 </div>
                 <div>
@@ -271,6 +285,8 @@ export default function AuthCard({
                       placeholder="grandmaster_vivek"
                       required
                       type="text"
+                      value={registerUsername}
+                      onChange={(e) => setRegisterUsername(e.target.value)}
                     />
                   </div>
                 </div>
@@ -286,16 +302,20 @@ export default function AuthCard({
                     placeholder="vivek@chess.com"
                     required
                     type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                    Country / Federation{" "}
+                    Country{" "}
                     <span className="text-purple-400">*</span>
                   </label>
                   <select
                     className="w-full px-3.5 py-2.5 bg-apex-elevated border border-apex-border rounded-lg text-sm text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all cursor-pointer font-sans"
                     defaultValue="India"
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
                   >
                     <option value="India">🇮🇳 India</option>
                     <option value="Norway">🇳🇴 Norway</option>
@@ -307,7 +327,7 @@ export default function AuthCard({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                    Security Key <span className="text-purple-400">*</span>
+                    Set Password <span className="text-purple-400">*</span>
                   </label>
                   <input
                     value={regPassword}
@@ -320,7 +340,7 @@ export default function AuthCard({
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                    Confirm Key <span className="text-purple-400">*</span>
+                    Confirm Password <span className="text-purple-400">*</span>
                   </label>
                   <input
                     className="w-full px-3.5 py-2.5 bg-apex-elevated border border-apex-border rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
@@ -330,12 +350,6 @@ export default function AuthCard({
                   />
                 </div>
               </div>
-
-              {error && (
-                <p className="text-sm text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-lg px-3 py-2">
-                  {error}
-                </p>
-              )}
 
               <div className="space-y-1">
                 <div className="flex justify-between items-center text-[10px] font-mono">
@@ -354,7 +368,11 @@ export default function AuthCard({
                 </div>
               </div>
 
-              {/* Keep Radio inputs and checkboxes from HTML identically structure in React JSX syntax */}
+              {error && (
+                <p className="text-sm text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-lg px-3 py-2">
+                  {error}
+                </p>
+              )}
 
               <button
                 className="w-full mt-3 py-3 px-4 rounded-xl bg-linear-to-r from-purple-600 via-indigo-600 to-cyan-600 hover:from-purple-500 hover:via-indigo-500 hover:to-cyan-500 text-white font-bold text-sm tracking-wider uppercase shadow-glow-purple transition-all duration-200 transform hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
