@@ -11,6 +11,9 @@ export default function NewGamePanel({ onStart, gameConfig, setGameConfig, mode 
     <div className="flex justify-evenly">
       <TimeControl gameConfig={gameConfig} setGameConfig={setGameConfig}/>
       <div className="h-[60vh] w-[30%] flex flex-col justify-evenly">
+        <span className="text-[#333439] flex justify-center">
+          Swipe the cards to change levels
+        </span>
         <BotDifficultySelector gameConfig={gameConfig} setGameConfig={setGameConfig}/>
         <div className="p-3 flex justify-center">
           <Button onClick={onStart} gameConfig={gameConfig} name={"Get Started"}/>

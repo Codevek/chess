@@ -109,9 +109,9 @@ export default function HomeScreen({
   return (
     <>
       {/* <ConfirmationDialog active={true}/> */}
-      <main className="min-h-screen bg-[#1b1b20] flex justify-evenly">
+      <main className="min-h-screen bg-[#0a0c10] flex justify-evenly">
         <div className="flex flex-col justify-evenly items-center">
-          <div className="w-[70vw] h-[30vh] rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl p-6">
+          <div className="w-[70vw] h-[30vh] rounded-3xl bg-[#12151d] border border-[#232838] backdrop-blur-md shadow-2xl p-6">
             <TopMenu
               mode={mode}
               setMode={setMode}
@@ -145,7 +145,7 @@ export default function HomeScreen({
               avatar={avatar3}
             />
           </div>
-          <div className="w-[25vw] h-[80vh] rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl">
+          <div className="w-[25vw] h-[80vh] rounded-3xl bg-[#12151d] border border-[#232838] backdrop-blur-md shadow-2xl">
             <PuzzleList />
           </div>
         </div>

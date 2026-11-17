@@ -376,7 +376,7 @@ export default function BoardScreen({ session, onQuitGame }) {
     <main
       className="
       min-h-screen
-      bg-[#1b1b20]
+      bg-[#0a0c10]
       flex
       overflow-hidden
       justify-center

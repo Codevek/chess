@@ -67,7 +67,7 @@ export default function FriendPanel({ gameStarted }) {
 
   return (
     <div className="h-[59vh] border-amber-300 flex justify-evenly">
-      <div className="h-full w-[50%] flex flex-col rounded-sm border border-white/10 shadow-xl p-2 gap-5">
+      <div className="h-full w-[50%] flex flex-col rounded-sm border border-[#232838] bg-[#12151d] backdrop-blur-md shadow-xl p-2 gap-5">
         <div className="p-3">
           <h1 className="flex text-amber-100 text-2xl">Friends and Rivals</h1>
           <p className="text-zinc-400 text-xs">

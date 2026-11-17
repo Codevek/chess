@@ -111,7 +111,7 @@ export default function TimerControl({ gameConfig, setGameConfig }) {
             value={increment}
             setvalue={setIncrement}
             min={0}
-            max={minute <= 10 ? minute : 10}
+            max={minute <= 30 ? Math.round(minute/4) : 10}
           />
         )}
       </div>

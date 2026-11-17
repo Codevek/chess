@@ -102,12 +102,12 @@ export default function AuthCard({
   return (
     <div className="w-full flex justify-center items-center">
       <section className="w-full max-w-xl">
-        <div className="bg-apex-card border border-apex-border rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+        <div className="bg-[#12151d] border border-[#232838] rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden backdrop-blur-xl">
           <div className="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-purple-500 to-transparent"></div>
 
-          <div className="flex items-center justify-between pb-6 border-b border-apex-border">
+          <div className="flex items-center justify-between pb-6 border-b border-[#232838]">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-apex-elevated border border-purple-500/40 p-1.5 shadow-glow-purple flex items-center justify-center">
+              <div className="w-11 h-11 rounded-xl bg-[#171b26] border border-purple-500/40 p-1.5 shadow-glow-purple flex items-center justify-center">
                 <img
                   alt="Icon"
                   className="w-full h-full object-contain"
@@ -125,7 +125,7 @@ export default function AuthCard({
             </div>
           </div>
 
-          <div className="my-6 p-1 bg-apex-elevated rounded-xl border border-apex-border flex gap-1 relative">
+          <div className="my-6 p-1 bg-[#171b26] rounded-xl border border-[#232838] flex gap-1 relative">
             <button
               onClick={() => setMode("signin")}
               className={`flex-1 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider rounded-lg transition-all duration-200 ${mode === "signin" ? "bg-purple-600 text-white shadow-glow-purple" : "text-slate-400 hover:text-white"}`}
@@ -148,7 +148,7 @@ export default function AuthCard({
                 </label>
                 <div className="relative">
                   <input
-                    className="w-full pl-4 pr-4 py-2.5 bg-apex-elevated border border-apex-border rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
+                    className="w-full pl-4 pr-4 py-2.5 bg-[#171b26] border border-[#232838] rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
                     placeholder="name@domain.com or @username"
                     required
                     type="text"
@@ -172,7 +172,7 @@ export default function AuthCard({
                 </div>
                 <div className="relative">
                   <input
-                    className="w-full pl-4 pr-10 py-2.5 bg-apex-elevated border border-apex-border rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
+                    className="w-full pl-4 pr-10 py-2.5 bg-[#171b26] border border-[#232838] rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
                     placeholder="Enter your secure password"
                     required
                     type={showPassword ? "text" : "password"}
@@ -211,8 +211,7 @@ export default function AuthCard({
               <div className="flex items-center justify-between pt-1">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
-                    defaultChecked
-                    className="w-4 h-4 rounded bg-apex-elevated border-apex-border text-purple-600 focus:ring-purple-500 focus:ring-offset-apex-bg"
+                    className="w-4 h-4 rounded bg-[#171b26] border-[#232838] text-purple-600 focus:ring-purple-500 focus:ring-offset-apex-bg"
                     type="checkbox"
                   />
                   <span className="text-xs text-slate-300">
@@ -259,7 +258,7 @@ export default function AuthCard({
                     Full Name <span className="text-purple-400">*</span>
                   </label>
                   <input
-                    className="w-full px-3.5 py-2.5 bg-apex-elevated border border-apex-border rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
+                    className="w-full px-3.5 py-2.5 bg-[#171b26] border border-[#232838] rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
                     placeholder="e.g. Vivek Sharma"
                     required
                     type="text"
@@ -281,7 +280,7 @@ export default function AuthCard({
                       @
                     </span>
                     <input
-                      className="w-full pl-8 pr-3.5 py-2.5 bg-apex-elevated border border-apex-border rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-mono"
+                      className="w-full pl-8 pr-3.5 py-2.5 bg-[#171b26] border border-[#232838] rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-mono"
                       placeholder="grandmaster_vivek"
                       required
                       type="text"
@@ -298,7 +297,7 @@ export default function AuthCard({
                     Email Address <span className="text-purple-400">*</span>
                   </label>
                   <input
-                    className="w-full px-3.5 py-2.5 bg-apex-elevated border border-apex-border rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
+                    className="w-full px-3.5 py-2.5 bg-[#171b26] border border-[#232838] rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
                     placeholder="vivek@chess.com"
                     required
                     type="email"
@@ -312,7 +311,7 @@ export default function AuthCard({
                     <span className="text-purple-400">*</span>
                   </label>
                   <select
-                    className="w-full px-3.5 py-2.5 bg-apex-elevated border border-apex-border rounded-lg text-sm text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all cursor-pointer font-sans"
+                    className="w-full px-3.5 py-2.5 bg-[#171b26] border border-[#232838] rounded-lg text-sm text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all cursor-pointer font-sans"
                     defaultValue="India"
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
@@ -332,7 +331,7 @@ export default function AuthCard({
                   <input
                     value={regPassword}
                     onChange={(e) => setRegPassword(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-apex-elevated border border-apex-border rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
+                    className="w-full px-3.5 py-2.5 bg-[#171b26] border border-[#232838] rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
                     placeholder="Min 8 alphanumeric"
                     required
                     type="password"
@@ -343,7 +342,7 @@ export default function AuthCard({
                     Confirm Password <span className="text-purple-400">*</span>
                   </label>
                   <input
-                    className="w-full px-3.5 py-2.5 bg-apex-elevated border border-apex-border rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
+                    className="w-full px-3.5 py-2.5 bg-[#171b26] border border-[#232838] rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-sans"
                     placeholder="Re-enter key"
                     required
                     type="password"
@@ -358,7 +357,7 @@ export default function AuthCard({
                     {strength.text}
                   </span>
                 </div>
-                <div className="w-full h-1.5 bg-apex-elevated rounded-full overflow-hidden flex gap-1">
+                <div className="w-full h-1.5 bg-[#171b26] rounded-full overflow-hidden flex gap-1">
                   <div className="h-full w-1/4 bg-purple-500 rounded-full"></div>
                   <div className="h-full w-1/4 bg-purple-500 rounded-full"></div>
                   <div className="h-full w-1/4 bg-purple-500 rounded-full"></div>
@@ -371,6 +370,7 @@ export default function AuthCard({
               {error && (
                 <p className="text-sm text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-lg px-3 py-2">
                   {error}
+                  {/* <button>X</button> */}
                 </p>
               )}
 
@@ -401,7 +401,7 @@ export default function AuthCard({
             </form>
           )}
 
-          <div className="mt-6 text-center text-xs text-slate-400 border-t border-apex-border/80 pt-4">
+          <div className="mt-6 text-center text-xs text-slate-400 border-t border-[#232838]/80 pt-4">
             <span>
               {mode === "signin"
                 ? "Don't have a verified chess handle?"
